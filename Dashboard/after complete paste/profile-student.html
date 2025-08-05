@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>teacher Profile</title>
+  <link rel="stylesheet" href="profile-teacher.css" />
+</head>
+<body>
+  <div class="profile-container">
+    <div class="top-bar">
+      <button onclick="window.location.href='teacher-dashboard.html'" class="back-btn">← Dashboard</button>
+      <h1>Welcome, <span id="teacherName">teacher</span></h1>
+    </div>
+
+    <div class="profile-card">
+      <h2>teacher Details</h2>
+      <div class="details-grid">
+        <div><strong>Email:</strong> <span id="teacherEmail"></span></div>
+        <div><strong>Age:</strong> <input type="text" id="teacherAge" disabled /></div>
+        <div><strong>Mobile:</strong> <input type="text" id="teacherNumber" disabled /></div>
+        <div><strong>WhatsApp:</strong> <input type="text" id="teacherWhatsApp" disabled /></div>
+        <div><strong>Address:</strong> <input type="text" id="teacherAddress" disabled /></div>
+        <div><strong>District:</strong> <input type="text" id="teacherDistrict" disabled /></div>
+        <div><strong>State:</strong> <input type="text" id="teacherState" disabled /></div>
+        <div><strong>Country:</strong> <input type="text" id="teacherCountry" disabled /></div>
+        <div><strong>ZIP:</strong> <input type="text" id="teacherZip" disabled /></div>
+      </div>
+
+      <div class="btn-group">
+        <button id="editBtn" onclick="enableEdit()">Edit</button>
+        <button id="saveBtn" onclick="saveProfile()" disabled>Save</button>
+      </div>
+      <div class="profile-container">
+    <div class="top-bar">
+        <button onclick="logout()" class="logout-btn">Logout</button>
+    </div>
+    </div>
+  </div>
+
+  <script type="module" src="profile-teacher.js"></script>
+</body>
+</html>

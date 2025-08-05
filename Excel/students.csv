@@ -1,0 +1,11 @@
+unique_id,name,class,class_time,category,batch,course,date_joined,attendance,performance
+gama001,test01,PMK,11:30,Gama,2024,Gama,6/1/2024,80%,good
+gama002,test02,PMK,9:00,Gama,2025,Gama,6/1/2024,80%,good
+gama003,test03,PMK,2:00,Gama,2025,Gama,6/1/2024,80%,good
+gama004,test04,PMK,9:00,Gama,2025,Gama,6/1/2024,80%,good
+other001,test1,jkp,11:30,Other,2024,C++,12/5/2025,80%,good
+other002,test2,jkp,10:30,Other,2025,AI,12/5/2025,80%,good
+other003,test3,jkp,2:00,Other,2025,C,12/5/2025,80%,good
+other004,test4,jkp,10:00,Other,2025,Python,12/5/2025,80%,good
+,,,,,,,,,
+,,,,,,,,,

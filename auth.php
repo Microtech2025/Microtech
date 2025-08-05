@@ -1,0 +1,138 @@
+<?php
+// You can add PHP session/auth logic here if needed
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login & Register</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="auth.css" />
+</head>
+<body>
+  <div class="background"></div>
+
+  <div class="form-container">
+    <button type="button" class="close-btn-modal"><i class='bx bx-x'></i></button>
+
+    <!-- Login Form -->
+    <div class="form-box login active">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <div class="input-group">
+          <i class='bx bx-user'></i>
+          <input type="email" id="loginEmail" placeholder="Email" required />
+        </div>
+
+        <div class="input-group">
+          <i class='bx bx-lock'></i>
+          <input type="password" id="loginPassword" placeholder="Password" required />
+        </div>
+
+        <div class="input-group">
+          <i class='bx bx-user-pin'></i>
+          <select id="loginRole" required>
+            <option value="" disabled selected>Select Role</option>
+            <option value="gamaabacus">GamaAbacus</option>
+            <option value="student">student</option>
+            <option value="teacher">Teacher</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+
+        <button type="submit">Login</button>
+      </form>
+      <p>Don't have an account? <span class="toggle-link" data-target="register">Register</span></p>
+    </div>
+
+    <!-- Register Form -->
+    <div class="form-box register">
+      <h2>Register</h2>
+      <form id="registerForm">
+        <div class="input-group">
+          <i class='bx bx-user'></i>
+          <input type="text" id="regName" placeholder="Name" required />
+        </div>
+
+        <div class="input-group">
+          <i class='bx bx-envelope'></i>
+          <input type="email" id="regEmail" placeholder="Email" required />
+        </div>
+
+        <div class="input-group">
+          <i class='bx bx-phone'></i>
+          <input type="tel" id="regNumber" placeholder="Phone Number" required />
+        </div>
+
+        <div class="input-group">
+          <i class='bx bx-chat'></i>
+          <input type="tel" id="regWhatsApp" placeholder="WhatsApp Number" />
+        </div>
+
+        <div class="input-group">
+          <i class='bx bx-user-circle'></i>
+          <input type="number" id="regAge" placeholder="Age" required />
+        </div>
+
+        <div class="input-group">
+          <i class='bx bx-map'></i>
+          <input type="text" id="regAddress" placeholder="Address" required />
+        </div>
+
+        <div class="input-group">
+          <i class='bx bx-map-pin'></i>
+          <input type="text" id="regDistrict" placeholder="District" required />
+        </div>
+
+        <div class="input-group">
+          <i class='bx bx-globe'></i>
+          <input type="text" id="regState" placeholder="State" required />
+        </div>
+
+        <div class="input-group">
+          <i class='bx bx-flag'></i>
+          <input type="text" id="regCountry" placeholder="Country" required />
+        </div>
+
+        <div class="input-group">
+          <i class='bx bx-package'></i>
+          <input type="text" id="regZip" placeholder="Zip / PIN Code" required />
+        </div>
+
+        <div class="input-group">
+          <i class='bx bx-lock'></i>
+          <input type="password" id="regPassword" placeholder="Password" required />
+        </div>
+
+        <div class="input-group">
+          <i class='bx bx-user-pin'></i>
+          <select id="regRole" required>
+            <option value="" disabled selected>Select Role</option>
+            <option value="gamaabacus">GamaAbacus</option>
+            <option value="teacher">teacher</option>
+            <option value="student">student</option>
+            <option value="teacher">Teacher</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+
+        <div class="input-group" id="adminSecret" style="display: none;">
+          <i class='bx bx-key'></i>
+          <input type="text" id="adminCode" placeholder="Admin Secret (if admin)" />
+        </div>
+
+        <button type="submit">Register</button>
+      </form>
+      <p>Already have an account? <span class="toggle-link" data-target="login">Login</span></p>
+    </div>
+  </div>
+
+  <div id="loadingOverlay">
+  <div class="loader"></div>
+</div>
+
+  <div id="transition-overlay"></div>
+  <script src="auth.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>teacher Navbar</title>
+  <link rel="stylesheet" href="teacher-dashboard.css" />
+</head>
+<body>
+
+  <nav class="teacher-navbar">
+    <div class="brand">MyMicrotech</div>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#">Dashboard</a></li>
+      <li><a href="#">Timetable</a></li>
+      <li><a href="#">Assignments</a></li>
+      <li><a href="#">Study Materials</a></li>
+      <li><a href="#">Performance</a></li>
+    </ul>
+
+    <div class="right-section">
+      <div class="notifications" title="Notifications">
+        🔔<span class="badge">3</span>
+      </div>
+
+      <div class="profile-dropdown">
+        <img src="3d Graduate Male teacher With Hat Cartoon Character PNG Images _ PNG Free Download - Pikbest.jfif" alt="Profile" class="profile-pic" id="profileBtn" />
+        <div class="dropdown-menu" id="dropdownMenu">
+          <a href="profile-teacher.html">View Profile</a>
+          <a href="#" onclick="logout()">Logout</a>
+        </div>
+      </div>
+
+      <button class="menu-toggle" id="menuToggle">☰</button>
+    </div>
+  </nav>
+
+  <section class="timetable-section">
+    <h2>Weekly Timetable</h2>
+    <div class="calendar-container">
+    <iframe
+      src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=Asia%2FKolkata&showPrint=0&title=Microtech&src=NTM1OTg3Zjk4ZWE1MTU3YzllZjU4N2Q1NGU2Y2VhYmZmNmIyZGI1MWFhOTcxMjhmZDIzMmY4ZjdhYWY2MjRhOUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZW4uaW5kaWFuI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&color=%2333b679&color=%23009688"
+      frameborder="0"
+      scrolling="no"
+      class="responsive-calendar"
+      allowfullscreen
+    ></iframe>
+  </div>
+  </section>
+
+  <section class="my-course-section">
+  <div class="my-course-header">
+    <h2>📘 My Course</h2>
+    <div class="my-course-buttons">
+    </div>
+  </div>
+
+  <div class="my-course-card">
+    <h3 id="courseName">Loading course...</h3>
+    <p><strong>Batch:</strong> <span id="courseBatch">-</span></p>
+    <p><strong>Duration:</strong> <span id="courseDuration">-</span></p>
+    <p><strong>Instructor:</strong> <span id="courseInstructor">-</span></p>
+    <p><strong>Status:</strong> <span id="courseStatus">-</span></p>
+
+    <div class="progress-wrapper">
+      <label>Progress:</label>
+      <div class="progress-bar">
+        <div class="progress-fill" id="courseProgressBar" style="width: 0%"></div>
+      </div>
+      <small id="courseProgressText">0% Completed</small>
+    </div>
+
+    <div class="module-list">
+      <h4>📚 Completed Modules:</h4>
+      <ul id="completedModules">
+        <li>Loading...</li>
+      </ul>
+    </div>
+
+    <button id="downloadCertificateBtn" class="certificate-btn" style="display: none;">
+      📄 Download Certificate
+    </button>
+  </div>
+</section>
+
+<section class="attendance-section">
+  <div class="attendance-header">
+    <h2>📅 Attendance</h2>
+  </div>
+
+  <div class="attendance-card">
+    <p><strong>Total Classes:</strong> <span id="totalClasses">-</span></p>
+    <p><strong>Classes Attended:</strong> <span id="classesAttended">-</span></p>
+
+    <div class="attendance-progress-wrapper">
+      <label>Attendance Percentage:</label>
+      <div class="attendance-progress-bar">
+        <div class="attendance-progress-fill" id="attendanceProgressBar" style="width: 0%"></div>
+      </div>
+      <small id="attendancePercentage">0%</small>
+    </div>
+
+    <p><strong>Status:</strong> <span id="attendanceStatus">-</span></p>
+
+    <div class="attendance-log">
+      <h4>🗓️ Attendance Log</h4>
+      <ul id="attendanceDates">
+        <li>Loading attendance...</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="fees-section">
+  <h2>💰 Fees & Receipts</h2>
+  <div id="feesContainer" class="fees-container">
+    <p>Loading fee records...</p>
+  </div>
+</section>
+
+<section class="exams-section">
+  <h2>📝 Exams & Marks</h2>
+  <div id="examContainer" class="exam-container">
+    <p>Loading exam records...</p>
+  </div>
+</section>
+
+<section class="communication-section">
+  <h2>📬 Communication</h2>
+  <div id="messagesContainer" class="messages-container">
+    <p>Loading messages...</p>
+  </div>
+
+  <form id="messageForm" class="message-form">
+    <input type="text" id="messageInput" placeholder="Type your message..." required />
+    <button type="submit">Send</button>
+  </form>
+</section>
+
+<section id="leaveRequestSection">
+  <h2>📅 Leave Request</h2>
+
+  <form id="leaveForm">
+    <label for="fromDate">From:</label>
+    <input type="date" id="fromDate" required>
+
+    <label for="toDate">To:</label>
+    <input type="date" id="toDate" required>
+
+    <label for="leaveReason">Reason:</label>
+    <textarea id="leaveReason" rows="3" required></textarea>
+
+    <button type="submit">Submit Request</button>
+  </form>
+
+  <h3>Your Requests</h3>
+  <ul id="leaveRequestsList"></ul>
+</section>
+
+<section id="certificateSection">
+  <h2>📄 Certificates</h2>
+
+  <div id="certificateInfo">
+    <p><strong>Course:</strong> <span id="certCourse">Loading...</span></p>
+    <p><strong>Status:</strong> <span id="certStatus">Loading...</span></p>
+
+    <button id="downloadCertBtn" style="display: none;">📥 Download Certificate</button>
+  </div>
+</section>
+
+<section id="feedbackSupportSection">
+  <h2>📝 Feedback & Support</h2>
+
+  <form id="feedbackForm">
+    <label for="feedbackMessage">Your Message</label>
+    <textarea id="feedbackMessage" placeholder="Write your feedback or support request..." required></textarea>
+
+    <button type="submit">📨 Submit</button>
+    <p id="feedbackStatus"></p>
+  </form>
+</section>
+
+
+  <script src="teacher-dashboard.js"></script>
+</body>
+</html>

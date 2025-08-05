@@ -1,0 +1,86 @@
+<?php
+// You can add PHP session/auth logic here if needed
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Courses | MicroTech</title>
+  <link rel="stylesheet" href="course.css" />
+  <script type="module" src="course.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>Available Courses</h1>
+    <p>Find the right course for your future</p>
+  </header>
+  
+  <main>
+    <section class="courses-container">
+      <div class="course-card"
+        data-title="Python Programming"
+        data-provider="LBS/CAPT"
+        data-desc="Learn Python from scratch. No prior experience needed."
+        data-duration="3 Months"
+        data-eligibility="No prior experience required"
+        data-fees="₹2000">
+        <img src="Course photo/50a2d11e-674f-4d28-97c0-424bc255dc91.jpeg" alt="Python Programming" class="course-thumb">
+        <h2>Python Programming</h2>
+        <button class="view-details-btn">View Details</button>
+      </div>
+      <div class="course-card"
+        data-title="Web Development"
+        data-provider="CAPT/LBS"
+        data-desc="Build modern websites using HTML, CSS, and JavaScript."
+        data-duration="3 Months"
+        data-eligibility="Basic computer knowledge"
+        data-fees="₹6000">
+        <img src="Course photo/web-1045994_1280.jpg" alt="Web Development" class="course-thumb">
+        <h2>Web Development</h2>
+        <button class="view-details-btn">View Details</button>
+      </div>
+      <div class="course-card"
+        data-title="IELTS"
+        data-provider="LBS"
+        data-desc="Introduction to Artificial Intelligence and Machine Learning."
+        data-duration="6 Months"
+        data-eligibility="Math background recommended"
+        data-fees="₹20000">
+        <img src="Course photo/IELTS words from wooden blocks with letters Education courses test of English as foreign language _ Premium Photo.jpeg" alt="AI Fundamentals" class="course-thumb">
+        <h2>IELTS</h2>
+        <button class="view-details-btn">View Details</button>
+      </div>
+      <div class="course-card"
+        data-title="AI Fundamentals"
+        data-provider="LBS"
+        data-desc="Introduction to Artificial Intelligence and Machine Learning."
+        data-duration="6 Months"
+        data-eligibility="Math background recommended"
+        data-fees="₹2000">
+        <img src="Course photo/ai-7977960_1280.jpg" alt="AI Fundamentals" class="course-thumb">
+        <h2>AI Fundamentals</h2>
+        <button class="view-details-btn">View Details</button>
+      </div>
+      <!-- Add more cards as needed -->
+    </section>
+
+    <!-- Modal for course details -->
+    <div id="course-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <img id="modal-image" src="" alt="Course Image" style="width:60px;height:60px;object-fit:cover;border-radius:0.4rem;margin-bottom:1rem;display:block;margin-left:auto;margin-right:auto;">
+        <h2 id="modal-title"></h2>
+        <div id="modal-details">
+          <p><strong>Provider:</strong> <span id="modal-provider"></span></p>
+          <p><strong>Description:</strong> <span id="modal-desc"></span></p>
+          <p><strong>Duration:</strong> <span id="modal-duration"></span></p>
+          <p><strong>Eligibility:</strong> <span id="modal-eligibility"></span></p>
+          <p><strong>Fees:</strong> <span id="modal-fees"></span></p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

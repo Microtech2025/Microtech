@@ -1,0 +1,38 @@
+<?php
+$conn = new mysqli("localhost", "root", "", "microtech");
+$fee_id = intval($_GET['fee_id']);
+$res = $conn->query("SELECT fees.*, students.unique_id, students.name, students.class, students.class_time FROM fees JOIN students ON fees.student_id=students.id WHERE fees.id=$fee_id");
+if (!$row = $res->fetch_assoc()) die("Receipt not found.");
+?>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fee Receipt</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; }
+    .receipt { max-width: 400px; margin: auto; border: 1px solid #ccc; border-radius: 8px; padding: 2rem; }
+    h2 { text-align: center; }
+    .row { margin-bottom: 0.7rem; }
+    .label { font-weight: bold; }
+    .print-btn { margin-top: 1.5rem; display: block; width: 100%; padding: 0.7rem; background: #eebbc3; border: none; border-radius: 1rem; font-weight: 600; cursor: pointer; }
+    .logo { text-align: center; margin-bottom: 1rem; }
+    .logo img { max-width: 80px; }
+  </style>
+</head>
+<body>
+  <div class="receipt">
+    <div class="logo"><img src="logo.png" alt="Institute Logo"></div>
+    <h2>Fee Receipt</h2>
+    <div class="row"><span class="label">Student:</span> <?= htmlspecialchars($row['unique_id']) ?> - <?= htmlspecialchars($row['name']) ?></div>
+    <div class="row"><span class="label">Class:</span> <?= htmlspecialchars($row['class']) ?></div>
+    <div class="row"><span class="label">Class Time:</span> <?= htmlspecialchars($row['class_time']) ?></div>
+    <div class="row"><span class="label">Month:</span> <?= htmlspecialchars($row['month_year']) ?></div>
+    <div class="row"><span class="label">Payment Date:</span> <?= htmlspecialchars($row['payment_date']) ?></div>
+    <div class="row"><span class="label">Amount:</span> ₹<?= htmlspecialchars($row['fee_amount']) ?></div>
+    <div class="row"><span class="label">Payment Mode:</span> <?= htmlspecialchars($row['payment_mode']) ?></div>
+    <div class="row"><span class="label">Status:</span> <?= htmlspecialchars($row['status']) ?></div>
+    <div class="row" style="margin-top:2rem;"><span class="label">Admin Signature:</span> ____________________</div>
+    <button class="print-btn" onclick="window.print()">Print Receipt</button>
+  </div>
+</body>
+</html>

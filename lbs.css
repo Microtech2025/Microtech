@@ -1,0 +1,101 @@
+/* Root color palette */
+:root {
+  --primary: #00bcd4;      /* Cyan */
+  --primary-dark: #0a1f21; /* Blue-Green */
+  --accent: #4dd0e1;       /* Lighter Cyan */
+  --background: #e0f7fa;   /* Light Cyan Background */
+  --card-bg: #59948f;      /* Light green-blue card */
+  --text: #032a23;         /* Deep Teal */
+  --button-text: #ffffff;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--background);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.form-container {
+  background-color: var(--card-bg);
+  padding: 35px 40px;
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(0, 150, 136, 0.2);
+  width: 100%;
+  max-width: 700px;
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 25px;
+  font-size: 26px;
+  color: var(--primary-dark);
+}
+
+form {
+  text-align: left;
+}
+
+form label {
+  display: block;
+  margin-top: 18px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+form input,
+form textarea,
+form select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid var(--primary);
+  border-radius: 10px;
+  font-size: 15px;
+  background-color: #b6f0ed;
+  color: var(--text);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+form input:focus,
+form textarea:focus,
+form select:focus {
+  outline: none;
+  border-color: var(--primary-dark);
+  box-shadow: 0 0 6px rgba(0, 188, 212, 0.4);
+}
+
+form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 28px;
+  font-size: 16px;
+  background: linear-gradient(to right, var(--primary-dark), var(--primary));
+  color: var(--button-text);
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: linear-gradient(to right, var(--primary), var(--accent));
+}
+
+#status {
+  margin-top: 18px;
+  text-align: center;
+  font-weight: 600;
+  color: var(--primary-dark);
+}

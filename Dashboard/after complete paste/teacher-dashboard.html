@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Teacher Dashboard</title>
+  <link rel="stylesheet" href="teacher-dashboard.css">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <img src="../micro-tech-center.jpg.png" alt="Logo" class="logo">
+      <span>Teacher</span>
+    </div>
+
+    <button class="hamburger" onclick="toggleMenu()">☰</button>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#">Dashboard</a></li>
+      <li><a href="#">Timetable</a></li>
+      <li><a href="#">Attendance</a></li>
+      <li><a href="#">Assignments</a></li>
+      <li><a href="#">teachers</a></li>
+    </ul>
+
+    <div class="profile-dropdown" onclick="toggleProfile()">
+      <img src="8ae50ced-0555-42c8-b886-ac580aeb1ca1.jfif" alt="Profile" class="avatar">
+      <div class="dropdown-menu" id="profileMenu">
+  <a href="profile-teacher.html">My Profile</a>
+  <a href="#" onclick="logout()">Logout</a>
+    </div>
+    </div>
+  </nav>
+
+  <section class="timetable-section">
+    <h2>Weekly Timetable</h2>
+    <div class="calendar-container">
+    <iframe
+      src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=Asia%2FKolkata&showPrint=0&title=Microtech&src=NTM1OTg3Zjk4ZWE1MTU3YzllZjU4N2Q1NGU2Y2VhYmZmNmIyZGI1MWFhOTcxMjhmZDIzMmY4ZjdhYWY2MjRhOUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZW4uaW5kaWFuI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&color=%2333b679&color=%23009688"
+      frameborder="0"
+      scrolling="no"
+      class="responsive-calendar"
+      allowfullscreen
+    ></iframe>
+  </div>
+  </section>
+
+  <section class="mark-attendance-section">
+  <h2>📋 Mark Attendance</h2>
+
+  <label for="attendanceDate">Select Date:</label>
+  <input type="date" id="attendanceDate" required />
+
+  <div id="teacherList" class="teacher-list">
+    <p>Loading teacher list...</p>
+  </div>
+
+  <button id="submitAttendance" class="submit-btn">Submit Attendance</button>
+</section>
+
+
+  <section class="next-classes">
+    <h2>Next Classes</h2>
+    <div class="class-list" id="classList">
+      <!-- JS-generated classes will appear here -->
+    </div>
+  </section>
+
+  <section class="batch-overview">
+    <h2>Batch Overview</h2>
+    <div class="batch-cards">
+      <div class="batch-card">
+        <h3>Class 10A</h3>
+        <p>teachers: 30</p>
+        <p>Attendance: 92%</p>
+        <button>Manage</button>
+        <button>Report</button>
+      </div>
+      <div class="batch-card">
+        <h3>Class 9B</h3>
+        <p>teachers: 25</p>
+        <p>Attendance: 88%</p>
+        <button>Manage</button>
+        <button>Report</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="announcements">
+    <h2>Recent Announcements</h2>
+    <div class="announcements-list">
+      <div class="announcement-card">Tomorrow there will be a test</div>
+    </div>
+  </section>
+
+  <section class="ai-suggestions">
+    <h2>AI Suggestions</h2>
+    <div class="ai-card">💡 Try a surprise quiz on algebra this week!</div>
+    <div class="ai-card">📘 Tip: Use mind maps to revise historical timelines.</div>
+  </section>
+
+
+   <section id="classBatch" class="card" onclick="navigate('Class/Batch Management')">
+      <h2>Class/Batch Management</h2>
+      <p>Manage class lists and batch assignments</p>
+    </section>
+
+    <section id="timetable" class="card" onclick="navigate('Timetable')">
+      <h2>Timetable</h2>
+      <p>View and update class schedules</p>
+    </section>
+
+    <section id="attendance" class="card" onclick="navigate('Attendance')">
+      <h2>Attendance</h2>
+      <p>Mark and review teacher attendance</p>
+    </section>
+
+    <section id="materials" class="card" onclick="navigate('Study Materials')">
+      <h2>Study Materials</h2>
+      <p>Upload and manage learning resources</p>
+    </section>
+
+    <section id="assignments" class="card" onclick="navigate('Assignments & Exams')">
+      <h2>Assignments & Exams</h2>
+      <p>Create, manage and evaluate assessments</p>
+    </section>
+
+    <section id="analytics" class="card" onclick="navigate('Performance Analytics')">
+      <h2>Performance Analytics</h2>
+      <p>Track and analyze teacher performance</p>
+    </section>
+
+    <section id="announcements" class="card" onclick="navigate('Announcements')">
+      <h2>Announcements</h2>
+      <p>Post announcements for teachers and parents</p>
+    </section>
+
+    <section id="communication" class="card" onclick="navigate('Communication Tools')">
+      <h2>Communication Tools</h2>
+      <p>Engage with teachers and parents</p>
+    </section>
+
+    <section id="feedback" class="card" onclick="navigate('Feedback')">
+      <h2>Feedback</h2>
+      <p>Collect and review feedback</p>
+    </section>
+
+    <section id="leave" class="card" onclick="navigate('Leave')">
+      <h2>Leave</h2>
+      <p>Apply or manage leave requests</p>
+    </section>
+
+    <section id="certificates" class="card" onclick="navigate('Certificates & Reports')">
+      <h2>Certificates & Reports</h2>
+      <p>Generate and download certificates</p>
+    </section>
+
+  
+
+  <!-- Add your page content below -->
+  <script src="teacher-dashboard.js"></script>
+</body>
+</html>

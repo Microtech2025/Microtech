@@ -1,0 +1,38 @@
+{
+  "LBS": [
+    {
+      "id": "lbs01",
+      "title": "DCA - Diploma in Computer Application",
+      "duration": "6 months"
+    },
+    {
+      "id": "lbs02",
+      "title": "Tally ERP with GST",
+      "duration": "3 months"
+    }
+  ],
+  "CAPT": [
+    {
+      "id": "capt01",
+      "title": "Graphic Designing",
+      "duration": "4 months"
+    },
+    {
+      "id": "capt02",
+      "title": "Web Development",
+      "duration": "6 months"
+    }
+  ],
+  "GAMA": [
+    {
+      "id": "gama01",
+      "title": "Gama Abacus Level 1",
+      "duration": "3 months"
+    },
+    {
+      "id": "gama02",
+      "title": "Gama Abacus Level 2",
+      "duration": "3 months"
+    }
+  ]
+}

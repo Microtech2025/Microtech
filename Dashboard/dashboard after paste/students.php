@@ -1,0 +1,356 @@
+<?php
+include './dp.php';
+
+// Handle Add Student
+if (isset($_POST['action']) && $_POST['action'] === 'add_student') {
+    $unique_id = $_POST['unique_id'];
+    $name = $_POST['name'];
+    $class = $_POST['class'];
+    $class_time = $_POST['class_time'];
+    $type = $_POST['type'];
+    $batch = $_POST['batch'];
+    $course = $_POST['course'];
+    $date_joined = $_POST['date_joined'];
+    $attendance = intval($_POST['attendance']);
+    $performance = $_POST['performance'];
+    $conn->query("INSERT INTO students (unique_id, name, class, class_time, type, batch, course, date_joined, attendance, performance) VALUES ('$unique_id', '$name', '$class', '$class_time', '$type', '$batch', '$course', '$date_joined', $attendance, '$performance')");
+    header("Location: students.php?msg=added");
+    exit;
+}
+
+// Handle Edit Student
+if (isset($_POST['action']) && $_POST['action'] === 'edit_student') {
+    $id = intval($_POST['id']);
+    $unique_id = $_POST['unique_id'];
+    $name = $_POST['name'];
+    $class = $_POST['class'];
+    $class_time = $_POST['class_time'];
+    $type = $_POST['type'];
+    $batch = $_POST['batch'];
+    $course = $_POST['course'];
+    $date_joined = $_POST['date_joined'];
+    $attendance = intval($_POST['attendance']);
+    $performance = $_POST['performance'];
+    $conn->query("UPDATE students SET unique_id='$unique_id', name='$name', class='$class', class_time='$class_time', type='$type', batch='$batch', course='$course', date_joined='$date_joined', attendance=$attendance, performance='$performance' WHERE id=$id");
+    header("Location: students.php?msg=updated");
+    exit;
+}
+
+// Handle Delete Student
+if (isset($_GET['delete'])) {
+    $id = intval($_GET['delete']);
+    $conn->query("DELETE FROM students WHERE id=$id");
+    header("Location: students.php?msg=deleted");
+    exit;
+}
+
+// Handle CSV Import
+if (isset($_POST['import_csv'])) {
+    if (is_uploaded_file($_FILES['csv_file']['tmp_name'])) {
+        $file = fopen($_FILES['csv_file']['tmp_name'], 'r');
+        fgetcsv($file); // skip header
+        while ($row = fgetcsv($file)) {
+            list($unique_id, $name, $class, $class_time, $type, $batch, $course, $date_joined, $attendance, $performance) = $row;
+            $conn->query("INSERT INTO students (unique_id, name, class, class_time, type, batch, course, date_joined, attendance, performance) VALUES ('$unique_id', '$name', '$class', '$class_time', '$type', '$batch', '$course', '$date_joined', $attendance, '$performance')");
+        }
+        fclose($file);
+        header("Location: students.php?msg=imported");
+        exit;
+    }
+}
+
+// Handle CSV Export
+if (isset($_GET['export_csv'])) {
+    header('Content-Type: text/csv');
+    header('Content-Disposition: attachment;filename=students.csv');
+    $out = fopen('php://output', 'w');
+    fputcsv($out, ['Unique ID', 'Name', 'Class', 'Class Time', 'Type', 'Batch', 'Course', 'Date Joined', 'Attendance', 'Performance']);
+    $res = $conn->query("SELECT unique_id, name, class, class_time, type, batch, course, date_joined, attendance, performance FROM students");
+    while ($row = $res->fetch_assoc()) {
+        fputcsv($out, $row);
+    }
+    fclose($out);
+    exit;
+}
+
+// Fetch all students
+$students = [];
+$res = $conn->query("SELECT * FROM students ORDER BY id DESC");
+while ($row = $res->fetch_assoc()) $students[] = $row;
+
+// Fetch payment status for each student (current month)
+$current_month = date('Y-m');
+$fees_status = [];
+$res = $conn->query("SELECT student_id, status FROM fees WHERE month_year='$current_month'");
+while ($row = $res->fetch_assoc()) $fees_status[$row['student_id']] = $row['status'];
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MicroTech Admin Dashboard</title>
+  <link rel="stylesheet" href="admin-dashboard.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <i class="bi bi-grid-1x2-fill"></i> <span>MicroTech Admin</span>
+    </div>
+    <nav>
+      <a href="admin-dashboard.php"><i class="bi bi-bar-chart-fill"></i> <span>Analytics</span></a>
+      <a href="students.php" class="active"><i class="bi bi-people-fill"></i> <span>Student Management</span></a>
+      <a href="staff.php"><i class="bi bi-person-badge-fill"></i> <span>Staff Management</span></a>
+      <a href="fees.php"><i class="bi bi-cash-coin"></i> <span>Fees</span></a>
+      <!-- Add more as needed -->
+    </nav>
+    <div class="bottom mt-auto">
+      <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+        <i id="themeIcon" class="bi bi-moon-stars-fill"></i>
+        <span>Theme</span>
+      </button>
+      <a class="profile" href="profile-admin.php">
+        <i class="bi bi-person-circle fs-4"></i>
+        <span>Profile</span>
+      </a>
+      <a class="profile" href="#" onclick="logout()">
+        <i class="bi bi-box-arrow-right"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <h1>Student Management</h1>
+    <!-- Student Management Section -->
+    <div class="card" id="student-management">
+      <div class="card-title">👨‍🎓 Student Management</div>
+      <div style="margin-bottom:1rem;">
+        <button class="btn" onclick="filterStudents('All')">All</button>
+        <button class="btn" onclick="filterStudents('Gama Abacus')">Gama Abacus</button>
+        <button class="btn" onclick="filterStudents('Other')">Other Courses</button>
+      </div>
+      <div style="display:flex;gap:1.5rem;flex-wrap:wrap;">
+        <div>
+          <div style="font-weight:600;">Gama Abacus Students</div>
+          <div id="gamaCount" style="font-size:2rem;font-weight:bold;">0</div>
+        </div>
+        <div>
+          <div style="font-weight:600;">Other Students</div>
+          <div id="otherCount" style="font-size:2rem;font-weight:bold;">0</div>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Role</th><th>Batch</th><th>Email</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="studentTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Add Student Form Card -->
+    <div class="card mb-4" style="max-width:500px;margin-top:2rem;">
+      <div class="card-header">
+        <h5 class="mb-0">Add Student</h5>
+      </div>
+      <div class="card-body">
+        <form id="addStudentForm" method="post" action="" autocomplete="off">
+          <input type="hidden" name="action" value="add_student">
+          <label for="unique_id">Unique ID (e.g. gama001):</label>
+          <input type="text" id="unique_id" name="unique_id" required class="form-control mb-2">
+
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required class="form-control mb-2">
+
+          <label for="class">Class:</label>
+          <input type="text" id="class" name="class" class="form-control mb-2">
+
+          <label for="class_time">Class Time:</label>
+          <input type="text" id="class_time" name="class_time" class="form-control mb-2">
+
+          <label for="type">Type:</label>
+          <select id="type" name="type" class="form-control mb-3">
+            <option value="gama">Gama</option>
+            <option value="other">Other</option>
+          </select>
+
+          <label for="batch">Batch:</label>
+          <input type="text" id="batch" name="batch" class="form-control mb-2">
+
+          <label for="course">Course:</label>
+          <input type="text" id="course" name="course" class="form-control mb-2">
+
+          <label for="date_joined">Date Joined:</label>
+          <input type="date" id="date_joined" name="date_joined" class="form-control mb-2">
+
+          <label for="attendance">Attendance:</label>
+          <input type="number" id="attendance" name="attendance" value="0" class="form-control mb-2">
+
+          <label for="performance">Performance:</label>
+          <input type="text" id="performance" name="performance" class="form-control mb-2">
+
+          <button type="submit" class="btn btn-success" style="width:100%;">Add Student</button>
+        </form>
+        <div id="addStudentMsg" style="margin-top:0.7rem;font-size:1rem;"></div>
+      </div>
+    </div>
+
+    <!-- Bulk Import/Export -->
+    <div class="card" style="margin-bottom:1.5rem;">
+      <form method="post" enctype="multipart/form-data" style="display:inline-block;">
+        <input type="file" name="csv_file" accept=".csv" required>
+        <button class="btn" type="submit" name="import_csv">Import CSV</button>
+      </form>
+      <a href="students.php?export_csv=1" class="btn">Export CSV</a>
+    </div>
+
+    <!-- Students Table -->
+    <div class="card">
+      <div class="card-title">All Students</div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Unique ID</th>
+              <th>Name</th>
+              <th>Class</th>
+              <th>Class Time</th>
+              <th>Type</th>
+              <th>Batch</th>
+              <th>Course</th>
+              <th>Date Joined</th>
+              <th>Attendance</th>
+              <th>Performance</th>
+              <th>Fee Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+          <?php foreach($students as $stu): ?>
+            <tr>
+              <td><?= htmlspecialchars($stu['unique_id']) ?></td>
+              <td><?= htmlspecialchars($stu['name']) ?></td>
+              <td><?= htmlspecialchars($stu['class']) ?></td>
+              <td><?= htmlspecialchars($stu['class_time']) ?></td>
+              <td><?= htmlspecialchars($stu['type']) ?></td>
+              <td><?= htmlspecialchars($stu['batch']) ?></td>
+              <td><?= htmlspecialchars($stu['course']) ?></td>
+              <td><?= htmlspecialchars($stu['date_joined']) ?></td>
+              <td><?= htmlspecialchars($stu['attendance']) ?></td>
+              <td><?= htmlspecialchars($stu['performance']) ?></td>
+              <td>
+                <?php
+                  $sid = $stu['id'];
+                  if (isset($fees_status[$sid])) {
+                    if ($fees_status[$sid] == 'paid') echo '<span style="color:green;font-weight:bold;">Paid</span>';
+                    else echo '<span style="color:orange;font-weight:bold;">Pending</span>';
+                  } else {
+                    echo '<span style="color:gray;">-</span>';
+                  }
+                ?>
+              </td>
+              <td>
+                <a href="students.php?edit=<?= $stu['id'] ?>" class="btn">Edit</a>
+                <a href="students.php?delete=<?= $stu['id'] ?>" class="btn" onclick="return confirm('Delete this student?')">Delete</a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Top bar for mobile -->
+  <div class="mobile-topbar">
+    <button class="theme-toggle" id="themeToggleMobile" title="Toggle Theme">
+      <i id="themeIconMobile" class="bi bi-moon-stars-fill"></i>
+    </button>
+    <a class="profile" href="profile-admin.php" title="Profile">
+      <i class="bi bi-person-circle fs-4"></i>
+    </a>
+    <a class="profile" href="#" onclick="logout()" title="Logout">
+      <i class="bi bi-box-arrow-right"></i>
+    </a>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    const toggleBtn = document.getElementById("themeToggle");
+    const icon = document.getElementById("themeIcon");
+
+    function applyTheme(theme) {
+      document.body.classList.toggle("dark-theme", theme === "dark");
+      icon.className = theme === "dark" ? "bi bi-brightness-high-fill" : "bi bi-moon-stars-fill";
+    }
+
+    function toggleTheme() {
+      const isDark = document.body.classList.contains("dark-theme");
+      const newTheme = isDark ? "light" : "dark";
+      localStorage.setItem("theme", newTheme);
+      applyTheme(newTheme);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedTheme = localStorage.getItem("theme") || "light";
+      applyTheme(savedTheme);
+    });
+
+    toggleBtn.addEventListener("click", toggleTheme);
+
+    // Dummy logout for demo
+    window.logout = function () {
+      window.location.href = "../index.php";
+    };
+  </script>
+  <script type="module" src="admin-student-management.js"></script>
+  <script type="module" src="admin-teacher-counselor.js"></script>
+  <script src="admin-dashboard.js"></script>
+  <script type="module" src="firebase-init.js"></script>
+  <script type="module" src="admin-dashboard-overview.js"></script>
+  <script src="fees-management.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
+  
+  <script type="module">
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+
+  // Your Firebase config (reuse from your project)
+  const firebaseConfig = {
+    apiKey: "AIzaSyAD_3jmeamJ2QyJk2OPi-ucB2DDQSUCPPw",
+    authDomain: "microtech-8e188.firebaseapp.com",
+    projectId: "microtech-8e188",
+    storageBucket: "microtech-8e188.appspot.com",
+    messagingSenderId: "401753262680",
+    appId: "1:401753262680:web:fb49631cc511f2457e982d",
+    measurementId: "G-JHHD1M22CW"
+  };
+  initializeApp(firebaseConfig);
+
+  const auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.href = "../index.php";
+    }
+  });
+</script>
+<script type="module">
+  import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  window.logout = function () {
+    const auth = getAuth();
+    signOut(auth).then(() => {
+      window.location.href = "../index.php";
+    });
+  };
+</script>
+<?php
+if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    var_dump($_POST);
+    if ($conn->error) echo "<div style='color:red'>SQL Error: " . $conn->error . "</div>";
+}
+?>
+</body>
+</html>
