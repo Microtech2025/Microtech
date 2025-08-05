@@ -229,7 +229,7 @@
       <a href="contact.php" class="cta-button">Contact Us</a>
     </div>
   </section>
-
+  
   <script src="script.js"></script>
   <!-- Chatbase Widget Embed -->
 <script>
