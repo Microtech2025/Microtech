@@ -3,7 +3,7 @@ document.getElementById('feeForm').onsubmit = async function(e) {
   const form = e.target;
   const data = new FormData(form);
   data.append('action', 'add_fee');
-  const res = await fetch('fees.php', { method: 'POST', body: data });
+  const res = await fetch('fees.html', { method: 'POST', body: data });
   const msg = await res.text();
   document.getElementById('feeFormMsg').textContent = msg === 'added' ? "Fee added!" : "Fee updated!";
   setTimeout(()=>location.reload(), 800);
@@ -22,7 +22,7 @@ async function checkPendingStatus() {
   const student_id = document.getElementById('student_id').value;
   const month_year = document.getElementById('month_year').value;
   if (!student_id || !month_year) return;
-  const res = await fetch('fees.php', {
+  const res = await fetch('fees.html', {
     method: 'POST',
     body: new URLSearchParams({
       action: 'check_status',

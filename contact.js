@@ -13,7 +13,7 @@ document.getElementById("contactForm").addEventListener("submit", function (e) {
     .then(function () {
       // Hide loader and redirect
       document.getElementById("loadingOverlay").style.display = "none";
-      window.location.href = "thankyou.php";
+      window.location.href = "thankyou.html";
     }, function (error) {
       // Hide loader and show error
       document.getElementById("loadingOverlay").style.display = "none";

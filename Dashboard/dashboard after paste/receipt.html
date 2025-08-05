@@ -1,9 +1,3 @@
-<?php
-$conn = new mysqli("localhost", "root", "", "microtech");
-$fee_id = intval($_GET['fee_id']);
-$res = $conn->query("SELECT fees.*, students.unique_id, students.name, students.class, students.class_time FROM fees JOIN students ON fees.student_id=students.id WHERE fees.id=$fee_id");
-if (!$row = $res->fetch_assoc()) die("Receipt not found.");
-?>
 <!DOCTYPE html>
 <html>
 <head>

@@ -18,7 +18,7 @@ const hamburger = document.querySelector('.hamburger');
       profileDropdown.style.display = profileDropdown.style.display === 'flex' ? 'none' : 'flex';
     } else {
       // Redirect to login
-      window.location.href = "auth.php";
+      window.location.href = "auth.html";
     }
   });
 

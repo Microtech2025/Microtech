@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Close to home
   if (closeButton) {
     closeButton.addEventListener('click', () => {
-      window.location.href = 'index.php';
+      window.location.href = 'index.html';
     });
   }
 });
@@ -152,16 +152,16 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     // Redirect by role
     switch (userData.role) {
       case "gamaabacus":
-        window.location.href = "Dashboard/gama-dashboard.php";
+        window.location.href = "Dashboard/gama-dashboard.html";
         break;
       case "teacher":
-        window.location.href = "Dashboard/teacher-dashboard.php";
+        window.location.href = "Dashboard/teacher-dashboard.html";
         break;
       case "admin":
-        window.location.href = "Dashboard/admin-dashboard.php";
+        window.location.href = "Dashboard/admin-dashboard.html";
         break;
       case "student":
-        window.location.href = "Dashboard/student-dashboard.php";
+        window.location.href = "Dashboard/student-dashboard.html";
         break;
       default:
         alert("❌ Unknown role.");

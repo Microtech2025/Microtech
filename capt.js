@@ -22,7 +22,7 @@ document.getElementById('admissionForm').addEventListener('submit', async functi
    * Handles the onload event of the FileReader. Converts the selected photo to
    * Base64 format, appends it to the form data, and sends it to the server for
    * processing. If the response is successful, redirects the user to the
-   * "thankyou.php" page.
+   * "thankyou.html" page.
    */
   reader.onload = async function () {
     const base64Image = reader.result;
@@ -43,7 +43,7 @@ document.getElementById('admissionForm').addEventListener('submit', async functi
       loader.style.display = "none";
 
       if (text.includes("success") || text.includes("Success") || text.includes("submitted")) {
-        window.location.href = "thankyou.php";
+        window.location.href = "thankyou.html";
       } else {
         status.innerText = text;
       }

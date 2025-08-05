@@ -37,7 +37,7 @@ document.getElementById('admissionForm').addEventListener('submit', async functi
       loader.style.display = "none";
 
       if (text.includes("success") || text.includes("Success") || text.includes("submitted")) {
-        window.location.href = "thankyou.php";
+        window.location.href = "thankyou.html";
       } else {
         status.innerText = text;
       }
