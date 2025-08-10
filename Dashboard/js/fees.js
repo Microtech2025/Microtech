@@ -186,7 +186,7 @@ class FeeManager {
                 
                 // Only update stats if both students and fees are loaded
                 if (this.students.length > 0 && this.fees.length > 0) {
-                    this.updateOverviewStats();
+                this.updateOverviewStats();
                 }
                 this.renderFeesTable();
             }, (error) => {
@@ -207,7 +207,7 @@ class FeeManager {
                 
                 // Only update stats if both students and fees are loaded
                 if (this.students.length > 0 && this.fees.length > 0) {
-                    this.updateOverviewStats();
+                this.updateOverviewStats();
                 }
                 this.renderFeesTable();
             }, (error) => {
@@ -289,19 +289,19 @@ class FeeManager {
             }
             
             // Calculate total fees based on actual collected fees and pending amounts
-            const totalCollected = this.fees.reduce((sum, fee) => sum + (fee.amount || 0), 0);
+        const totalCollected = this.fees.reduce((sum, fee) => sum + (fee.amount || 0), 0);
             const pendingFees = this.calculatePendingFees();
             const totalFees = totalCollected + pendingFees;
             
             // Calculate collection rate based on collected vs total expected
-            const collectionRate = totalFees > 0 ? Math.round((totalCollected / totalFees) * 100) : 0;
-            
+        const collectionRate = totalFees > 0 ? Math.round((totalCollected / totalFees) * 100) : 0;
+        
             // Calculate average payment from collected fees
-            const averagePayment = this.fees.length > 0 ? 
+        const averagePayment = this.fees.length > 0 ? 
                 totalCollected / this.fees.length : 0;
-            
+        
             // Calculate payment frequency for current month
-            const paymentFrequency = this.calculatePaymentFrequency();
+        const paymentFrequency = this.calculatePaymentFrequency();
 
             console.log('Left panel calculations:', {
                 totalFees,
