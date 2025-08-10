@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alumni Portal</title>
+  <link rel="stylesheet" href="./css/admin-dashboard.css" />
+  <script>
+    window.ENV = window.ENV || {};
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script type="module" src="./js/alumni.js"></script>
+</head>
+<body>
+  <main class="content" style="max-width:720px;margin:8vh auto;">
+    <div class="card">
+      <h2>Alumni Registration</h2>
+      <form id="alumniForm">
+        <div class="grid" style="grid-template-columns:repeat(2,1fr);gap:12px;">
+          <input class="input" name="name" placeholder="Full Name" required />
+          <input class="input" name="email" type="email" placeholder="Email" required />
+          <input class="input" name="phone" placeholder="Phone" />
+          <select class="input" name="division">
+            <option value="capt">CAPT</option>
+            <option value="lbs">LBS</option>
+            <option value="gama">Gama Abacus</option>
+            <option value="micro">Micro Computers</option>
+            <option value="other">Other</option>
+          </select>
+          <input class="input" name="passingYear" type="number" placeholder="Passing Year" />
+          <input class="input" name="achievements" placeholder="Achievements (optional)" />
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px;">
+          <button type="submit" class="btn accent">Register</button>
+        </div>
+      </form>
+      <div id="status" style="margin-top:8px;color:var(--muted)"></div>
+    </div>
+  </main>
+</body>
+</html>
