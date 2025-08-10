@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CAPT Admission</title>
+  <link rel="stylesheet" href="./css/admin-dashboard.css" />
+  <link rel="stylesheet" href="./capt.css" />
+  <script>
+    window.ENV = window.ENV || {};
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script type="module" src="./capt.js"></script>
+</head>
+<body>
+  <main class="content" style="max-width:720px;margin:8vh auto;">
+    <div class="card">
+      <h2>CAPT Admission Form</h2>
+      <form id="captForm">
+        <div class="grid" style="grid-template-columns:repeat(2,1fr);gap:12px;">
+          <input class="input" name="name" placeholder="Full Name" required />
+          <input class="input" name="email" type="email" placeholder="Email" />
+          <input class="input" name="phone" placeholder="Phone" />
+          <input class="input" name="course" placeholder="Course" />
+          <input class="input" name="batch" placeholder="Preferred Batch" />
+          <input class="input" name="joinDate" type="date" />
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px;">
+          <button type="submit" class="btn accent">Submit</button>
+        </div>
+      </form>
+      <div id="status" style="margin-top:8px;color:var(--muted)"></div>
+    </div>
+  </main>
+</body>
+</html>

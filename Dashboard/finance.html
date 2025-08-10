@@ -1,211 +1,94 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="apple-touch-icon" href="../micro-tech-center.jpg.png">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="admin-dashboard.css">
-    <link rel="stylesheet" href="css/finance.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Finance</title>
+  <link rel="stylesheet" href="./css/admin-dashboard.css" />
+  <script>
+    window.ENV = window.ENV || {};
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+  <script type="module" src="./js/finance.js"></script>
 </head>
-<body class="dark-theme">
-
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h2>MicroTech</h2>
-            <button class="close-btn" id="closeSidebar"><i class="fas fa-times"></i></button>
-        </div>
-        <nav class="sidebar-menu">
-            <a href="admin-dashboard.html" class="active"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a>
-            <a href="student.html"><i class="fas fa-users"></i> <span>Students</span></a>
-            <a href="staff.html"><i class="fas fa-user-tie"></i> <span>Staff</span></a>
-            <a href="finance.html"><i class="fas fa-money-bill-wave"></i> <span>Finance</span></a>
-            <a href="fees.html"><i class="fas fa-money-bill-wave"></i> <span>Fees</span></a>
-            <a href="marketing.html"><i class="fas fa-bullhorn"></i> <span>Marketing</span></a>
-            <a href="settings.html"><i class="fas fa-cogs"></i> <span>Settings</span></a>
-        </nav>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">Institution Admin</div>
+      <nav>
+        <a href="./admin-dashboard.html">Dashboard</a>
+        <a href="./student.html">Students</a>
+        <a href="./staff.html">Staff</a>
+        <a href="./fees.html">Fees</a>
+        <a href="./finance.html" class="active">Finance</a>
+        <a href="./marketing.html">Marketing</a>
+        <a href="./settings.html">Settings</a>
+      </nav>
     </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Top Navbar -->
-        <header class="topbar">
-            <button class="menu-btn" id="openSidebar"><i class="fas fa-bars"></i></button>
-            <div class="topbar-actions">
-                <button id="themeToggle" title="Toggle Theme"><i class="fas fa-moon"></i></button>
-                <button title="Notifications"><i class="fas fa-bell"></i></button>
-                <div class="profile">
-                    <img src="../micro-tech-center.jpg.png" alt="Profile">
-                </div>
-            </div>
-        </header>
-
-        <!-- Dashboard Widgets -->
-        <section class="revenue-entry">
-  <h3>Add Revenue</h3>
-  <form id="revenueForm">
-    <label>Division</label>
-    <select id="divisionSelect" required>
-      <option value="">Select Division</option>
-      <option value="CAPT">CAPT</option>
-      <option value="LBS">LBS</option>
-      <option value="Gama">Gama</option>
-      <option value="Micro Computers">Micro Computers</option>
-    </select>
-
-    <label>Amount (₹)</label>
-    <input type="number" id="amountInput" min="0" required>
-
-    <button type="submit">Add Revenue</button>
-  </form>
-</section>
-
+    <main>
+      <header class="header">
+        <div class="left">
+          <button id="sidebarToggle" class="btn ghost sidebar-toggle">☰</button>
+          <h2 style="margin:0">Finance</h2>
+        </div>
+        <div class="actions">
+          <button id="themeToggle" class="btn ghost">Toggle theme</button>
+        </div>
+      </header>
+      <section class="content">
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap;">
+          <select id="type" class="input">
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+          </select>
+          <select id="category" class="input">
+            <option value="salaries">Salaries</option>
+            <option value="rent">Rent</option>
+            <option value="utilities">Utilities</option>
+            <option value="ads">Ads</option>
+            <option value="supplies">Supplies</option>
+            <option value="other">Other</option>
+          </select>
+          <select id="division" class="input">
+            <option value="">Division</option>
+            <option value="capt">CAPT</option>
+            <option value="lbs">LBS</option>
+            <option value="gama">Gama Abacus</option>
+            <option value="micro">Micro Computers</option>
+            <option value="other">Other</option>
+          </select>
+          <input id="amount" class="input" type="number" step="0.01" placeholder="Amount" />
+          <input id="date" class="input" type="date" />
+          <input id="note" class="input" placeholder="Note" />
+          <button id="addTx" class="btn accent">Add</button>
+          <button id="exportCSV" class="btn">Export CSV</button>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap;">
+          <input id="fromDate" class="input" type="date" />
+          <input id="toDate" class="input" type="date" />
+          <select id="filterDivision" class="input">
+            <option value="">All Divisions</option>
+            <option value="capt">CAPT</option>
+            <option value="lbs">LBS</option>
+            <option value="gama">Gama Abacus</option>
+            <option value="micro">Micro Computers</option>
+            <option value="other">Other</option>
+          </select>
+          <button id="applyFilters" class="btn">Apply</button>
+        </div>
+        <table class="table" id="txTable">
+          <thead>
+            <tr>
+              <th>Date</th><th>Type</th><th>Category</th><th>Division</th><th>Amount</th><th>Note</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
     </main>
-
-    <script src="js/finance.js"></script>
-    <script type="module">
-      const themeToggle = document.getElementById('themeToggle');
-const body = document.body;
-const openSidebar = document.getElementById('openSidebar');
-const closeSidebar = document.getElementById('closeSidebar');
-const sidebar = document.getElementById('sidebar');
-const navLinks = document.querySelectorAll('.sidebar-menu a');
-
-// Load saved theme
-if (localStorage.getItem('theme') === 'light') {
-    body.classList.add('light-theme');
-    themeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun');
-}
-
-// Theme toggle
-themeToggle.addEventListener('click', () => {
-    body.classList.toggle('light-theme');
-    const icon = themeToggle.querySelector('i');
-
-    if (body.classList.contains('light-theme')) {
-        icon.classList.replace('fa-moon', 'fa-sun');
-        localStorage.setItem('theme', 'light');
-    } else {
-        icon.classList.replace('fa-sun', 'fa-moon');
-        localStorage.setItem('theme', 'dark');
-    }
-});
-
-// Sidebar open (mobile only)
-if (openSidebar) {
-    openSidebar.addEventListener('click', () => {
-        sidebar.classList.remove('hidden');
-    });
-}
-
-// Sidebar close (mobile only)
-if (closeSidebar) {
-    closeSidebar.addEventListener('click', () => {
-        sidebar.classList.add('hidden');
-    });
-}
-
-// Hide sidebar on mobile by default
-if (window.innerWidth <= 768) {
-    sidebar.classList.add('hidden');
-}
-
-// Active link highlight & close sidebar on mobile
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        navLinks.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-
-        if (window.innerWidth <= 768) {
-            sidebar.classList.add('hidden');
-        }
-    });
-});
-
-// Auto highlight based on current page URL
-const currentPage = window.location.pathname.split("/").pop();
-navLinks.forEach(link => {
-    if (link.getAttribute("href") === currentPage) {
-        navLinks.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-    }
-});
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- Firebase + Firestore -->
-<script type="module">
-  // Firebase core + Firestore
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyD5pgNOjCXdkopJW_mtqTpnaa-8MyUZzHc",
-    authDomain: "microtech-88235.firebaseapp.com",
-    projectId: "microtech-88235",
-    storageBucket: "microtech-88235.firebasestorage.app",
-    messagingSenderId: "177325108755",
-    appId: "1:177325108755:web:37d5a44e9a721a501359e6",
-    measurementId: "G-0NXTJF6L49"
-  };
-
-  // Init Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  // --- REAL-TIME DASHBOARD LOGIC ---
-  const totalRevenueEl = document.getElementById('totalRevenue');
-  const captEl = document.getElementById('captRevenue'); // optional if you want per division
-  const divisionSelect = document.getElementById('divisionSelect');
-  const amountInput = document.getElementById('amountInput');
-  const revenueForm = document.getElementById('revenueForm');
-
-  // Real-time listener for revenue
-  const q = query(collection(db, "revenue"));
-  onSnapshot(q, (snapshot) => {
-    let total = 0;
-    let divisionTotals = { CAPT: 0, LBS: 0, Gama: 0, "Micro Computers": 0 };
-
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      total += data.amount;
-      if (divisionTotals[data.division] !== undefined) {
-        divisionTotals[data.division] += data.amount;
-      }
-    });
-
-    // Update totals
-    totalRevenueEl.textContent = `₹${total.toLocaleString()}`;
-    console.log("Division totals:", divisionTotals); // You can bind these to chart data
-  });
-
-  // Add revenue entry
-  if (revenueForm) {
-    revenueForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const division = divisionSelect.value;
-      const amount = parseFloat(amountInput.value);
-
-      if (!division || isNaN(amount) || amount <= 0) {
-        alert("Please enter valid details");
-        return;
-      }
-
-      try {
-        await addDoc(collection(db, "revenue"), {
-          division,
-          amount,
-          date: new Date()
-        });
-        revenueForm.reset();
-        alert("Revenue added successfully");
-      } catch (err) {
-        console.error("Error adding revenue:", err);
-      }
-    });
-  }
-</script>
+  </div>
 </body>
 </html>

@@ -1,0 +1,9 @@
+{
+  "name": "Institution Admin",
+  "short_name": "Admin",
+  "start_url": "/Dashboard/admin-dashboard.html",
+  "display": "standalone",
+  "background_color": "#121826",
+  "theme_color": "#121826",
+  "icons": []
+}
