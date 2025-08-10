@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Fee Management - MicroTech</title>
     <link rel="apple-touch-icon" href="../micro-tech-center.jpg.png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="admin-dashboard.css">
@@ -18,11 +18,11 @@
             <button class="close-btn" id="closeSidebar"><i class="fas fa-times"></i></button>
         </div>
         <nav class="sidebar-menu">
-            <a href="admin-dashboard.html" class="active"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a>
+            <a href="admin-dashboard.html"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a>
             <a href="student.html"><i class="fas fa-users"></i> <span>Students</span></a>
             <a href="staff.html"><i class="fas fa-user-tie"></i> <span>Staff</span></a>
             <a href="finance.html"><i class="fas fa-money-bill-wave"></i> <span>Finance</span></a>
-            <a href="fees.html"><i class="fas fa-money-bill-wave"></i> <span>Fees</span></a>
+            <a href="fees.html" class="active"><i class="fas fa-money-bill-wave"></i> <span>Fees</span></a>
             <a href="marketing.html"><i class="fas fa-bullhorn"></i> <span>Marketing</span></a>
             <a href="settings.html"><i class="fas fa-cogs"></i> <span>Settings</span></a>
         </nav>
@@ -42,17 +42,420 @@
             </div>
         </header>
 
-        <!-- Dashboard Widgets -->
-        <section class="dashboard">
-            <div class="card">Total Revenue</div>
-            <div class="card">Students</div>
-            <div class="card">Staff</div>
-            <div class="card">Upcoming Events</div>
+        <!-- Fee Management Section -->
+        <section class="fee-management">
+            <div class="fee-header">
+                <h1>Fee Management</h1>
+                <div class="fee-actions">
+                    <button class="btn btn-primary" id="addNewStudentBtn">
+                        <i class="fas fa-user-plus"></i> Add New Student
+                    </button>
+                    <button class="btn btn-primary" id="recordPaymentBtn">
+                        <i class="fas fa-plus"></i> Record Payment
+                    </button>
+                    <button class="btn btn-success" id="sendNotificationsBtn">
+                        <i class="fas fa-bell"></i> Send Notifications
+                    </button>
+                </div>
+            </div>
+
+            <div class="fee-content-wrapper">
+                <!-- Left Side Panel -->
+                <div class="left-panel">
+                    <!-- Revenue Analytics Chart -->
+                    <div class="left-panel-section">
+                        <h3><i class="fas fa-chart-line"></i> Revenue Analytics</h3>
+                        <div class="chart-container">
+                            <canvas id="revenueChart" width="300" height="200"></canvas>
+                        </div>
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: #007bff;"></span>
+                                <span>This Month</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: #28a745;"></span>
+                                <span>Last Month</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="left-panel-section">
+                        <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                        <div class="quick-actions">
+                            <button class="quick-action-btn" onclick="feeManager.exportFeesReport()">
+                                <i class="fas fa-download"></i>
+                                <span>Export Report</span>
+                            </button>
+                            <button class="quick-action-btn" onclick="feeManager.generateInvoice()">
+                                <i class="fas fa-file-invoice"></i>
+                                <span>Generate Invoice</span>
+                            </button>
+                            <button class="quick-action-btn" onclick="feeManager.viewPaymentHistory()">
+                                <i class="fas fa-history"></i>
+                                <span>Payment History</span>
+                            </button>
+                            <button class="quick-action-btn" onclick="feeManager.manageFeeStructure()">
+                                <i class="fas fa-cog"></i>
+                                <span>Fee Structure</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Recent Payments -->
+                    <div class="left-panel-section">
+                        <h3><i class="fas fa-clock"></i> Recent Payments</h3>
+                        <div class="recent-payments" id="recentPayments">
+                            <!-- Recent payments will be loaded here -->
+                        </div>
+                    </div>
+
+                    <!-- Fee Statistics -->
+                    <div class="left-panel-section">
+                        <h3><i class="fas fa-chart-pie"></i> Fee Statistics</h3>
+                        <div class="fee-stats">
+                            <div class="stat-item">
+                                <div class="stat-label">Collection Rate</div>
+                                <div class="stat-value" id="collectionRate">0%</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Average Payment</div>
+                                <div class="stat-value" id="averagePayment">₹0</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Payment Frequency</div>
+                                <div class="stat-value" id="paymentFrequency">0/month</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Calendar -->
+                    <div class="left-panel-section">
+                        <h3><i class="fas fa-calendar-alt"></i> Payment Calendar</h3>
+                        <div class="payment-calendar" id="paymentCalendar">
+                            <!-- Calendar will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side Content -->
+                <div class="right-content">
+                    <!-- Fee Overview Cards -->
+                    <div class="overview-cards">
+                        <div class="overview-card">
+                            <h3>Total Fees Collected</h3>
+                            <div class="amount" id="totalFeesCollected">₹0</div>
+                        </div>
+                        <div class="overview-card warning">
+                            <h3>Pending Fees</h3>
+                            <div class="amount" id="pendingFees">₹0</div>
+                        </div>
+                        <div class="overview-card danger">
+                            <h3>Students with Pending Fees</h3>
+                            <div class="amount" id="studentsWithPending">0</div>
+                        </div>
+                        <div class="overview-card success">
+                            <h3>This Month Collection</h3>
+                            <div class="amount" id="thisMonthCollection">₹0</div>
+                        </div>
+                    </div>
+
+                    <!-- Search and Filters -->
+                    <div class="search-filters">
+                        <h3>Search and Filters</h3>
+                        <div class="filters-row">
+                            <div class="form-group">
+                                <input type="text" id="studentSearch" class="search-input" placeholder="Search by student name, phone, or email...">
+                            </div>
+                            <div class="form-group">
+                                <select id="divisionFilter" class="filter-select">
+                                    <option value="all">All Divisions</option>
+                                    <option value="CAPT">CAPT</option>
+                                    <option value="LBS">LBS Skill Centre</option>
+                                    <option value="Gama">Gama Abacus</option>
+                                    <option value="Micro Computers">Micro Computers</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select id="statusFilter" class="filter-select">
+                                    <option value="all">All Status</option>
+                                    <option value="paid">Paid</option>
+                                    <option value="low_pending">Low Pending</option>
+                                    <option value="medium_pending">Medium Pending</option>
+                                    <option value="high_pending">High Pending</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select id="monthFilter" class="filter-select">
+                                    <option value="all">All Months</option>
+                                    <option value="0">January</option>
+                                    <option value="1">February</option>
+                                    <option value="2">March</option>
+                                    <option value="3">April</option>
+                                    <option value="4">May</option>
+                                    <option value="5">June</option>
+                                    <option value="6">July</option>
+                                    <option value="7">August</option>
+                                    <option value="8">September</option>
+                                    <option value="9">October</option>
+                                    <option value="10">November</option>
+                                    <option value="11">December</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fees Table -->
+                    <div class="fees-table-container">
+                        <table class="fees-table">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Division</th>
+                                    <th>Course</th>
+                                    <th>Total Fees</th>
+                                    <th>Paid Amount</th>
+                                    <th>Pending Amount</th>
+                                    <th>Last Payment</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="feesTableBody">
+                                <!-- Fees data will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </section>
+
+        <!-- Record Payment Modal -->
+        <div class="modal" id="paymentModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Record Payment</h2>
+                    <button class="close-modal" id="closeModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="paymentForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="studentSelect">Select Student *</label>
+                                <select id="studentSelect" name="studentSelect" class="form-control" required>
+                                    <option value="">Search and select student...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="amount">Payment Amount (₹) *</label>
+                                <input type="number" id="amount" name="amount" class="form-control" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="paymentMethod">Payment Method *</label>
+                                <select id="paymentMethod" name="paymentMethod" class="form-control" required>
+                                    <option value="">Select Payment Method</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="Card">Card</option>
+                                    <option value="UPI">UPI</option>
+                                    <option value="Online">Online Transfer</option>
+                                    <option value="Cheque">Cheque</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="date">Payment Date *</label>
+                                <input type="date" id="date" name="date" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="month">For Month (Gama Abacus)</label>
+                                <select id="month" name="month" class="form-control">
+                                    <option value="">Select Month</option>
+                                    <option value="1">January</option>
+                                    <option value="2">February</option>
+                                    <option value="3">March</option>
+                                    <option value="4">April</option>
+                                    <option value="5">May</option>
+                                    <option value="6">June</option>
+                                    <option value="7">July</option>
+                                    <option value="8">August</option>
+                                    <option value="9">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="year">For Year</label>
+                                <input type="number" id="year" name="year" class="form-control" min="2020" max="2030" 
+                                       value="2024">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notes">Payment Notes</label>
+                            <textarea id="notes" name="notes" class="form-control" rows="3" 
+                                      placeholder="Any additional notes about this payment..."></textarea>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" onclick="feeManager.closeModals()">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Record Payment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add New Student Modal -->
+        <div class="modal" id="addStudentModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Add New Student</h2>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="addStudentForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="studentName">Student Name *</label>
+                                <input type="text" id="studentName" name="studentName" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="studentPhone">Phone Number *</label>
+                                <input type="tel" id="studentPhone" name="studentPhone" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="studentEmail">Email</label>
+                                <input type="email" id="studentEmail" name="studentEmail" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="studentDivision">Division *</label>
+                                <select id="studentDivision" name="studentDivision" class="form-control" required>
+                                    <option value="">Select Division</option>
+                                    <option value="CAPT">CAPT</option>
+                                    <option value="LBS">LBS Skill Centre</option>
+                                    <option value="Gama">Gama Abacus</option>
+                                    <option value="Micro Computers">Micro Computers</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="studentCourse">Course</label>
+                                <input type="text" id="studentCourse" name="studentCourse" class="form-control" placeholder="e.g., Basic Computer, Advanced Excel">
+                            </div>
+                            <div class="form-group">
+                                <label for="totalFees">Total Fees (₹) *</label>
+                                <input type="number" id="totalFees" name="totalFees" class="form-control" min="0" step="0.01" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="joinDate">Join Date *</label>
+                                <input type="date" id="joinDate" name="joinDate" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="dueDate">Due Date</label>
+                                <input type="date" id="dueDate" name="dueDate" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="studentNotes">Notes</label>
+                            <textarea id="studentNotes" name="studentNotes" class="form-control" rows="3" 
+                                      placeholder="Any additional notes about the student..."></textarea>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" onclick="feeManager.closeModals()">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Add Student</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Modal -->
+        <div class="modal" id="notificationModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Send Bulk Notifications</h2>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="notificationForm">
+                        <div class="form-group">
+                            <label>Select Students:</label>
+                            <div id="notificationStudentList">
+                                <!-- Student options will be populated here -->
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Notification Methods:</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="whatsappCheck" name="notificationMethods" value="WhatsApp" checked>
+                                    <label for="whatsappCheck">WhatsApp</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="emailCheck" name="notificationMethods" value="Email">
+                                    <label for="emailCheck">Email</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="smsCheck" name="notificationMethods" value="SMS">
+                                    <label for="smsCheck">SMS</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="messageTemplate">Message Template:</label>
+                            <select id="messageTemplate" name="messageTemplate" class="form-control">
+                                <option value="custom">Custom Message</option>
+                                <option value="fee_reminder">Fee Reminder</option>
+                                <option value="overdue_notice">Overdue Notice</option>
+                                <option value="payment_confirmation">Payment Confirmation</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customMessage">Custom Message:</label>
+                            <textarea id="customMessage" name="customMessage" class="form-control" rows="4" 
+                                      placeholder="Enter your custom message here..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="scheduledDate">Schedule Date (Optional):</label>
+                            <input type="datetime-local" id="scheduledDate" name="scheduledDate" class="form-control">
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" onclick="feeManager.closeModals()">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Send Notifications</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <script src="admin-dashboard.js"></script>
-    <script src="js/fees.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="firebase.js"></script>
+    <script type="module" src="js/fees.js"></script>
     <script type="module">
       const themeToggle = document.getElementById('themeToggle');
 const body = document.body;

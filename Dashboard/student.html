@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Student Management - Admin Dashboard</title>
     <link rel="apple-touch-icon" href="../micro-tech-center.jpg.png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="admin-dashboard.css">
@@ -18,8 +18,8 @@
             <button class="close-btn" id="closeSidebar"><i class="fas fa-times"></i></button>
         </div>
         <nav class="sidebar-menu">
-            <a href="admin-dashboard.html" class="active"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a>
-            <a href="student.html"><i class="fas fa-users"></i> <span>Students</span></a>
+            <a href="admin-dashboard.html"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a>
+            <a href="student.html" class="active"><i class="fas fa-users"></i> <span>Students</span></a>
             <a href="staff.html"><i class="fas fa-user-tie"></i> <span>Staff</span></a>
             <a href="finance.html"><i class="fas fa-money-bill-wave"></i> <span>Finance</span></a>
             <a href="marketing.html"><i class="fas fa-bullhorn"></i> <span>Marketing</span></a>
@@ -42,14 +42,533 @@
             </div>
         </header>
 
-        <!-- Dashboard Widgets -->
-        <section class="dashboard">
-            <div class="card">Total Revenue</div>
-            <div class="card">Students</div>
-            <div class="card">Staff</div>
-            <div class="card">Upcoming Events</div>
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-title">
+                <h1><i class="fas fa-users"></i> Student Management</h1>
+                <p>Manage student records, admissions, and information</p>
+            </div>
+            <div class="page-actions">
+                <button class="btn btn-primary" id="addStudentBtn">
+                    <i class="fas fa-plus"></i> Add New Student
+                </button>
+                <button class="btn btn-outline" onclick="studentManager.exportStudents()">
+                    <i class="fas fa-download"></i> Export
+                </button>
+                <button class="btn btn-warning bulk-actions-btn" onclick="studentManager.openBulkActionsModal()" style="display: none;">
+                    <i class="fas fa-tasks"></i> Bulk Actions (<span id="selectedCount">0</span>)
+                </button>
+            </div>
+        </div>
+
+        <!-- Overview Statistics -->
+        <section class="stats-section">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="totalStudents">0</h3>
+                    <p>Total Students</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="newThisMonth">0</h3>
+                    <p>New This Month</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="activeStudents">0</h3>
+                    <p>Active Students</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="totalRevenue">₹0</h3>
+                    <p>Total Revenue</p>
+                </div>
+            </div>
         </section>
+
+        <!-- Search and Filters -->
+        <section class="controls-section">
+            <div class="search-filters">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchStudent" placeholder="Search students by name, phone, email...">
+                </div>
+                <div class="filters">
+                    <select id="divisionFilter">
+                        <option value="">All Divisions</option>
+                        <option value="CAPT">CAPT (Computer Academy)</option>
+                        <option value="LBS">LBS Skill Centre</option>
+                        <option value="Gama Abacus">Gama Abacus</option>
+                        <option value="Micro Computers">Micro Computers</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <select id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                        <option value="Graduated">Graduated</option>
+                        <option value="Suspended">Suspended</option>
+                    </select>
+                    <select id="courseFilter">
+                        <option value="">All Courses</option>
+                        <option value="Graphic Design">Graphic Design</option>
+                        <option value="Programming">Programming</option>
+                        <option value="Office Applications">Office Applications</option>
+                        <option value="Hardware & Networking">Hardware & Networking</option>
+                        <option value="Web Development">Web Development</option>
+                        <option value="Digital Marketing">Digital Marketing</option>
+                        <option value="Mental Arithmetic">Mental Arithmetic</option>
+                        <option value="Computer Basics">Computer Basics</option>
+                    </select>
+                </div>
+            </div>
+            <div class="view-controls">
+                <button class="btn btn-outline" id="viewToggleBtn" onclick="studentManager.toggleViewMode()">
+                    <i class="fas fa-th-large"></i> <span>Grid View</span>
+                </button>
+                <button class="btn btn-outline" onclick="studentManager.refreshData()">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+                <button class="btn btn-outline" onclick="studentManager.openBulkUploadModal()">
+                    <i class="fas fa-upload"></i> Bulk Upload
+                </button>
+            </div>
+        </section>
+
+        <!-- Students Table -->
+        <section class="table-section">
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" id="selectAllStudents" onchange="studentManager.toggleSelectAll(this)">
+                            </th>
+                            <th>Photo</th>
+                            <th>Student Info</th>
+                            <th>Division</th>
+                            <th>Course</th>
+                            <th>Contact</th>
+                            <th>Status</th>
+                            <th>Fees</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTableBody">
+                        <!-- Student rows will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Add/Edit Student Modal -->
+        <div id="studentModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Add New Student</h2>
+                    <button id="closeModal" class="close-modal">&times;</button>
+                </div>
+                <form id="studentForm" class="modal-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="studentName">Full Name *</label>
+                            <input type="text" id="studentName" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentPhone">Phone Number *</label>
+                            <input type="tel" id="studentPhone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentEmail">Email</label>
+                            <input type="email" id="studentEmail" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="studentDivision">Division *</label>
+                            <select id="studentDivision" name="division" required>
+                                <option value="">Select Division</option>
+                                <option value="CAPT">CAPT (Computer Academy)</option>
+                                <option value="LBS">LBS Skill Centre</option>
+                                <option value="Gama Abacus">Gama Abacus</option>
+                                <option value="Micro Computers">Micro Computers</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentCourse">Course *</label>
+                            <select id="studentCourse" name="course" required>
+                                <option value="">Select Course</option>
+                                <option value="Graphic Design">Graphic Design</option>
+                                <option value="Programming">Programming</option>
+                                <option value="Office Applications">Office Applications</option>
+                                <option value="Hardware & Networking">Hardware & Networking</option>
+                                <option value="Web Development">Web Development</option>
+                                <option value="Digital Marketing">Digital Marketing</option>
+                                <option value="Mental Arithmetic">Mental Arithmetic</option>
+                                <option value="Computer Basics">Computer Basics</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentFees">Total Fees *</label>
+                            <input type="number" id="studentFees" name="fees" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentPaymentMode">Payment Mode</label>
+                            <select id="studentPaymentMode" name="paymentMode">
+                                <option value="Full">Full Payment</option>
+                                <option value="Installment">Installment</option>
+                                <option value="Monthly">Monthly</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentStatus">Status</label>
+                            <select id="studentStatus" name="status">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                                <option value="Graduated">Graduated</option>
+                                <option value="Suspended">Suspended</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentAdmissionDate">Admission Date *</label>
+                            <input type="date" id="studentAdmissionDate" name="admissionDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentGuardian">Guardian Name</label>
+                            <input type="text" id="studentGuardian" name="guardian">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="studentAddress">Address</label>
+                            <textarea id="studentAddress" name="address" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentPhoto">Photo URL</label>
+                            <input type="url" id="studentPhoto" name="photoURL" placeholder="https://example.com/photo.jpg">
+                        </div>
+                        <div class="form-group">
+                            <label for="studentNotes">Notes</label>
+                            <textarea id="studentNotes" name="notes" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancelBtn" class="btn btn-secondary">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <span id="submitBtnText">Add Student</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Bulk Actions Modal -->
+        <div id="bulkActionsModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Bulk Actions</h2>
+                    <button class="close-modal" onclick="studentManager.closeBulkActionsModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="bulk-actions">
+                        <button class="btn btn-warning" onclick="studentManager.bulkStatusUpdate()">
+                            <i class="fas fa-edit"></i> Update Status
+                        </button>
+                        <button class="btn btn-info" onclick="studentManager.bulkExport()">
+                            <i class="fas fa-download"></i> Export Selected
+                        </button>
+                        <button class="btn btn-danger" onclick="studentManager.bulkDelete()">
+                            <i class="fas fa-trash"></i> Delete Selected
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bulk Upload Modal -->
+        <div id="bulkUploadModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Bulk Upload Students</h2>
+                    <button class="close-modal" onclick="studentManager.closeBulkUploadModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="upload-instructions">
+                        <h3>Instructions:</h3>
+                        <ol>
+                            <li>Download the CSV template below</li>
+                            <li>Fill in student information</li>
+                            <li>Upload the completed CSV file</li>
+                            <li>Review and confirm the data</li>
+                        </ol>
+                        <div class="template-download">
+                            <button class="btn btn-outline" onclick="studentManager.downloadCSVTemplate()">
+                                <i class="fas fa-download"></i> Download CSV Template
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="upload-section">
+                        <h3>Upload CSV File:</h3>
+                        <div class="file-upload">
+                            <input type="file" id="csvFileInput" accept=".csv" onchange="studentManager.handleCSVFileSelect(event)">
+                            <label for="csvFileInput" class="file-upload-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Choose CSV file or drag & drop here</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="csvPreview" class="csv-preview" style="display: none;">
+                        <h3>Data Preview:</h3>
+                        <div class="preview-table-container">
+                            <table class="preview-table">
+                                <thead id="previewTableHead"></thead>
+                                <tbody id="previewTableBody"></tbody>
+                            </table>
+                        </div>
+                        <div class="preview-actions">
+                            <button class="btn btn-success" onclick="studentManager.confirmBulkUpload()">
+                                <i class="fas fa-check"></i> Confirm Upload
+                            </button>
+                            <button class="btn btn-secondary" onclick="studentManager.cancelBulkUpload()">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Document Management Modal -->
+        <div id="documentModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Document Management</h2>
+                    <button class="close-modal" onclick="studentManager.closeDocumentModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="document-upload">
+                        <h3>Upload Documents for: <span id="documentStudentName"></span></h3>
+                        <div class="document-types">
+                            <div class="document-type">
+                                <label>ID Proof:</label>
+                                <input type="file" id="idProofFile" accept=".pdf,.jpg,.jpeg,.png" onchange="studentManager.handleDocumentUpload('idProof', event)">
+                            </div>
+                            <div class="document-type">
+                                <label>Certificate:</label>
+                                <input type="file" id="certificateFile" accept=".pdf,.jpg,.jpeg,.png" onchange="studentManager.handleDocumentUpload('certificate', event)">
+                            </div>
+                            <div class="document-type">
+                                <label>Other Documents:</label>
+                                <input type="file" id="otherDocsFile" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" onchange="studentManager.handleDocumentUpload('other', event)">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="document-list">
+                        <h3>Current Documents:</h3>
+                        <div id="documentList" class="document-items">
+                            <!-- Documents will be listed here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="studentManager.closeDocumentModal()">Close</button>
+                </div>
+            </div>
+        </div>
     </main>
+
+    <!-- Student Add/Edit Modal -->
+    <div id="studentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Student</h2>
+                <button id="closeModal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="studentForm" onsubmit="studentManager.handleFormSubmit(event)">
+                    <div class="photo-preview-container">
+                        <img id="photoPreview" alt="Photo Preview">
+                        <div class="photo-upload-container">
+                            <label for="studentPhoto" class="photo-upload-label">
+                                <i class="fas fa-camera"></i> Upload Photo
+                            </label>
+                            <input type="file" id="studentPhoto" name="photo" accept="image/*" 
+                                   onchange="studentManager.handlePhotoChange(event)">
+                        </div>
+                        <button type="button" class="btn btn-outline btn-sm" onclick="studentManager.clearPhotoPreview()">
+                            <i class="fas fa-times"></i> Clear Photo
+                        </button>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentName">Full Name *</label>
+                            <input type="text" id="studentName" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentPhone">Phone Number *</label>
+                            <input type="tel" id="studentPhone" name="phone" required maxlength="10">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentEmail">Email</label>
+                            <input type="email" id="studentEmail" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="studentAdmissionDate">Admission Date *</label>
+                            <input type="date" id="studentAdmissionDate" name="admissionDate" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentDivision">Division *</label>
+                            <select id="studentDivision" name="division" required>
+                                <option value="">Select Division</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Information Technology">Information Technology</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Mechanical">Mechanical</option>
+                                <option value="Civil">Civil</option>
+                                <option value="Chemical">Chemical</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentCourse">Course *</label>
+                            <select id="studentCourse" name="course" required>
+                                <option value="">Select Course</option>
+                                <option value="B.Tech">B.Tech</option>
+                                <option value="M.Tech">M.Tech</option>
+                                <option value="Diploma">Diploma</option>
+                                <option value="Certificate">Certificate</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentFees">Fees Amount *</label>
+                            <input type="number" id="studentFees" name="fees" required min="0" step="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="studentPaymentMode">Payment Mode</label>
+                            <select id="studentPaymentMode" name="paymentMode">
+                                <option value="Full">Full Payment</option>
+                                <option value="Installment">Installment</option>
+                                <option value="Monthly">Monthly</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentStatus">Status</label>
+                            <select id="studentStatus" name="status">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                                <option value="Graduated">Graduated</option>
+                                <option value="Suspended">Suspended</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentAddress">Address</label>
+                            <textarea id="studentAddress" name="address" rows="3" placeholder="Enter student address"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentGuardianName">Guardian Name</label>
+                            <input type="text" id="studentGuardianName" name="guardianName">
+                        </div>
+                        <div class="form-group">
+                            <label for="studentGuardianPhone">Guardian Phone</label>
+                            <input type="tel" id="studentGuardianPhone" name="guardianPhone" maxlength="10">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="studentNotes">Additional Notes</label>
+                        <textarea id="studentNotes" name="notes" rows="3" placeholder="Any additional information about the student"></textarea>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" id="cancelBtn" class="btn btn-secondary">Cancel</button>
+                        <button type="submit" id="submitBtn" class="btn btn-primary">
+                            <span id="submitBtnText">Add Student</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Actions Modal -->
+    <div id="bulkActionsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Bulk Actions</h2>
+                <button class="close-btn" onclick="studentManager.closeBulkActionsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Selected <span id="selectedCount">0</span> students</p>
+                <div class="bulk-actions">
+                    <button class="btn btn-primary" onclick="studentManager.bulkStatusUpdate()">
+                        <i class="fas fa-edit"></i> Update Status
+                    </button>
+                    <button class="btn btn-info" onclick="studentManager.bulkExport()">
+                        <i class="fas fa-download"></i> Export Selected
+                    </button>
+                    <button class="btn btn-danger" onclick="studentManager.bulkDelete()">
+                        <i class="fas fa-trash"></i> Delete Selected
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Upload Modal -->
+    <div id="bulkUploadModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Bulk Upload Students</h2>
+                <button class="close-btn" onclick="studentManager.closeBulkUploadModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="upload-section">
+                    <p>Upload a CSV file with student information. <a href="#" onclick="studentManager.downloadCSVTemplate()">Download template</a></p>
+                    <input type="file" id="csvFile" accept=".csv" onchange="studentManager.handleCSVFileSelect(event)">
+                </div>
+                <div id="csvPreview" class="csv-preview" style="display: none;">
+                    <h3>Preview:</h3>
+                    <div id="previewTable"></div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="studentManager.cancelBulkUpload()">Cancel</button>
+                    <button id="confirmUploadBtn" class="btn btn-primary" onclick="studentManager.confirmBulkUpload()" style="display: none;">
+                        Confirm Upload
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="admin-dashboard.js"></script>
     <script src="js/student.js"></script>
