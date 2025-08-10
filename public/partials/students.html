@@ -1,0 +1,27 @@
+<div class="toolbar">
+  <button id="addStudent" class="btn btn-primary">Add Student</button>
+  <input id="searchStudent" placeholder="Search by name, course, batch" />
+  <select id="filterDivision">
+    <option value="All">All Divisions</option>
+    <option>CAPT</option>
+    <option>LBS</option>
+    <option>Gama Abacus</option>
+    <option>Micro Computers</option>
+    <option>Other</option>
+  </select>
+  <label>CSV Upload
+    <input id="csvUpload" type="file" accept=".csv" />
+  </label>
+  <button id="exportStudents" class="btn">Export CSV</button>
+</div>
+
+<div class="card">
+  <table class="table" id="studentsTable">
+    <thead>
+      <tr>
+        <th>Student ID</th><th>Name</th><th>Phone</th><th>Email</th><th>Division</th><th>Course</th><th>Batch</th><th>Fees Paid</th><th>Outstanding</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>

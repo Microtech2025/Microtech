@@ -1,0 +1,54 @@
+<div class="toolbar">
+  <label>From<input type="date" id="filterFrom"></label>
+  <label>To<input type="date" id="filterTo"></label>
+  <label>Division
+    <select id="filterDivision">
+      <option value="All">All</option>
+      <option>CAPT</option>
+      <option>LBS</option>
+      <option>Gama Abacus</option>
+      <option>Micro Computers</option>
+      <option>Other</option>
+    </select>
+  </label>
+  <button id="applyFilters" class="btn">Apply</button>
+  <button id="backupExport" class="btn">Backup JSON</button>
+</div>
+
+<div class="grid grid-4">
+  <div class="card kpi"><div>
+    <div class="value" id="kpiRevenue">₹0</div>
+    <div class="label">Total Revenue</div>
+  </div></div>
+  <div class="card kpi"><div>
+    <div class="value" id="kpiStudents">0</div>
+    <div class="label">Students</div>
+  </div></div>
+  <div class="card kpi"><div>
+    <div class="value" id="kpiStaff">0</div>
+    <div class="label">Staff</div>
+  </div></div>
+  <div class="card kpi"><div>
+    <div class="value" id="kpiTeachers">0</div>
+    <div class="label">Teachers</div>
+  </div></div>
+</div>
+
+<div class="grid grid-2" style="margin-top:12px;">
+  <div class="card">
+    <div class="card-title">Revenue Trend</div>
+    <canvas id="chartRevenue"></canvas>
+  </div>
+  <div class="card">
+    <div class="card-title">Division Split</div>
+    <canvas id="chartDivision"></canvas>
+  </div>
+  <div class="card">
+    <div class="card-title">Profit / Loss</div>
+    <canvas id="chartProfit"></canvas>
+  </div>
+  <div class="card">
+    <div class="card-title">Expense Categories</div>
+    <canvas id="chartExpense"></canvas>
+  </div>
+</div>
