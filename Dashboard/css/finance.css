@@ -1,0 +1,30 @@
+.revenue-entry {
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px;
+}
+
+.revenue-entry form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.revenue-entry input,
+.revenue-entry select,
+.revenue-entry button {
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+}
+
+.revenue-entry button {
+  background: var(--accent-color);
+  color: white;
+  cursor: pointer;
+}
+
+.revenue-entry button:hover {
+  opacity: 0.9;
+}

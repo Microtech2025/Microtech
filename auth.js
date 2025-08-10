@@ -4,28 +4,28 @@ function showLoading(show = true) {
 }
 
 // ==== Firebase Setup ====
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 import {
   getFirestore,
   setDoc,
   getDoc,
   doc
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 // Firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyAD_3jmeamJ2QyJk2OPi-ucB2DDQSUCPPw",
-  authDomain: "microtech-8e188.firebaseapp.com",
-  projectId: "microtech-8e188",
-  storageBucket: "microtech-8e188.firebasestorage.app",
-  messagingSenderId: "401753262680",
-  appId: "1:401753262680:web:fb49631cc511f2457e982d",
-  measurementId: "G-JHHD1M22CW"
+  apiKey: "AIzaSyD5pgNOjCXdkopJW_mtqTpnaa-8MyUZzHc",
+  authDomain: "microtech-88235.firebaseapp.com",
+  projectId: "microtech-88235",
+  storageBucket: "microtech-88235.firebasestorage.app",
+  messagingSenderId: "177325108755",
+  appId: "1:177325108755:web:37d5a44e9a721a501359e6",
+  measurementId: "G-0NXTJF6L49"
 };
 
 // Initialize Firebase
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Show admin code field only if admin is selected
   regRole.addEventListener("change", () => {
-    adminSecret.style.display = regRole.value === "admin" ? "flex" : "none";
+    adminSecret.style.display = (regRole.value === "admin" || regRole.value === "counselor") ? "flex" : "none";
   });
 
   // Close to home
@@ -87,8 +87,9 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
   const role = document.getElementById("regRole").value;
   const adminCode = document.getElementById("adminCode")?.value?.trim() || "";
 
-  if (role === "admin" && adminCode !== "adminjenny22*") {
-    alert("❌ Invalid admin code.");
+  // Require secret for both admin and counselor
+  if ((role === "admin" || role === "counselor") && adminCode !== "adminjenny22*") {
+    alert("❌ Invalid secret code for this role.");
     return;
   }
 
@@ -159,6 +160,9 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
         break;
       case "admin":
         window.location.href = "Dashboard/admin-dashboard.html";
+        break;
+      case "counselor":
+        window.location.href = "Dashboard/counselor-dashboard.html";
         break;
       case "student":
         window.location.href = "Dashboard/student-dashboard.html";

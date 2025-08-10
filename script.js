@@ -1,45 +1,54 @@
-const hamburger = document.querySelector('.hamburger');
-  const navLinks = document.querySelector('.nav-links');
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('nav-links');
 
-  hamburger.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
+hamburger.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+  hamburger.classList.toggle('active');
+});
+
+// Optional: close menu when a link is clicked (mobile UX)
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    hamburger.classList.remove('active');
   });
+});
 
-  const isLoggedIn = false; // Change to true if logged in
+const isLoggedIn = false; // Change to true if logged in
 
-  const profileContainer = document.getElementById('profile-container');
-  const profileLabel = document.getElementById('profile-label');
-  const profileDropdown = document.getElementById('profile-dropdown');
-  const logoutBtn = document.getElementById('logout-btn');
+const profileContainer = document.getElementById('profile-container');
+const profileLabel = document.getElementById('profile-label');
+const profileDropdown = document.getElementById('profile-dropdown');
+const logoutBtn = document.getElementById('logout-btn');
 
-  // Toggle dropdown
-  document.getElementById('profile-icon').addEventListener('click', () => {
-    if (isLoggedIn) {
-      profileDropdown.style.display = profileDropdown.style.display === 'flex' ? 'none' : 'flex';
-    } else {
-      // Redirect to login
-      window.location.href = "auth.html";
-    }
-  });
+// Toggle dropdown
+document.getElementById('profile-icon').addEventListener('click', () => {
+  if (isLoggedIn) {
+    profileDropdown.style.display = profileDropdown.style.display === 'flex' ? 'none' : 'flex';
+  } else {
+    // Redirect to login
+    window.location.href = "auth.html";
+  }
+});
 
-  // Handle login/logout display
-  window.addEventListener('DOMContentLoaded', () => {
-    if (!isLoggedIn) {
-      profileLabel.innerText = "Login";
-      profileDropdown.style.display = "none";
-    } else {
-      profileLabel.innerText = "My Account";
-      profileDropdown.style.display = "none";
-    }
-  });
+// Handle login/logout display
+window.addEventListener('DOMContentLoaded', () => {
+  if (!isLoggedIn) {
+    profileLabel.innerText = "Login";
+    profileDropdown.style.display = "none";
+  } else {
+    profileLabel.innerText = "My Account";
+    profileDropdown.style.display = "none";
+  }
+});
 
-  // Handle logout
-  logoutBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    // Logic to log out (e.g., clear tokens)
-    alert("Logged out!");
-    window.location.reload();
-  });
+// Handle logout
+logoutBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  // Logic to log out (e.g., clear tokens)
+  alert("Logged out!");
+  window.location.reload();
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   const slides = document.querySelectorAll('.fade-img');

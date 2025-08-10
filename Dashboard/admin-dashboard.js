@@ -1,71 +1,71 @@
-import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { db } from './firebase.js';
+import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyAD_3jmeamJ2QyJk2OPi-ucB2DDQSUCPPw",
-    authDomain: "microtech-8e188.firebaseapp.com",
-    projectId: "microtech-8e188",
-    storageBucket: "microtech-8e188.appspot.com",
-    messagingSenderId: "401753262680",
-    appId: "1:401753262680:web:fb49631cc511f2457e982d",
-    measurementId: "G-JHHD1M22CW"
-  };
-
-  // Initialize Firebase App
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  // ✅ Logout function
-  window.logout = function () {
-    signOut(auth)
-      .then(() => {
-        window.location.href = "../index.html"; // or login page
-      })
-      .catch((error) => {
-        console.error("Logout failed:", error);
-        alert("Failed to logout. Please try again.");
-      });
-  };
-
-  // Get both theme toggle buttons and icons
-  const toggleBtn = document.getElementById("themeToggle");
-  const icon = document.getElementById("themeIcon");
-  const toggleBtnMobile = document.getElementById("themeToggleMobile");
-  const iconMobile = document.getElementById("themeIconMobile");
-
-  function applyTheme(theme) {
-    document.body.classList.toggle("dark-theme", theme === "dark");
-    if (icon) icon.className = theme === "dark" ? "bi bi-brightness-high-fill" : "bi bi-moon-stars-fill";
-    if (iconMobile) iconMobile.className = theme === "dark" ? "bi bi-brightness-high-fill" : "bi bi-moon-stars-fill";
-  }
-
-  function toggleTheme() {
-    const isDark = document.body.classList.contains("dark-theme");
-    const newTheme = isDark ? "light" : "dark";
-    localStorage.setItem("theme", newTheme);
-    applyTheme(newTheme);
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const savedTheme = localStorage.getItem("theme") || "light";
-    applyTheme(savedTheme);
-  });
-
-  if (toggleBtn) toggleBtn.addEventListener("click", toggleTheme);
-  if (toggleBtnMobile) toggleBtnMobile.addEventListener("click", toggleTheme);
-
-  // Section switching logic for sidebar navigation
-  document.querySelectorAll('.sidebar .nav-link').forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      // Remove active from all links
-      document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
-      this.classList.add('active');
-      // Hide all sections
-      document.querySelectorAll('.section-window').forEach(sec => sec.style.display = 'none');
-      // Show the selected section
-      const sectionId = this.getAttribute('data-section');
-      const section = document.getElementById(sectionId);
-      if (section) section.style.display = '';
+function loadStats() {
+    // Students live
+    onSnapshot(collection(db, "students"), snap => {
+        document.getElementById('totalStudents').textContent = snap.size;
     });
-  });
+
+    // Staff live
+    onSnapshot(collection(db, "staff"), snap => {
+        document.getElementById('totalStaff').textContent = snap.size;
+    });
+
+    // Courses live
+    onSnapshot(collection(db, "courses"), snap => {
+        document.getElementById('totalCourses').textContent = snap.size;
+    });
+
+    // Revenue live
+    onSnapshot(collection(db, "revenue"), snap => {
+        let totalRevenue = 0;
+        let divisionRevenue = { CAPT: 0, LBS: 0, Gama: 0, "Micro Computers": 0 };
+
+        snap.forEach(doc => {
+            const data = doc.data();
+            // Ensure amount is a number
+            const amount = typeof data.amount === "number" ? data.amount : Number(data.amount) || 0;
+            totalRevenue += amount;
+            if (divisionRevenue[data.division] !== undefined) {
+                divisionRevenue[data.division] += amount;
+            }
+        });
+
+        document.getElementById('totalRevenue').textContent = `₹${totalRevenue.toLocaleString()}`;
+        renderCharts(divisionRevenue);
+    });
+}
+
+function renderCharts(divisionRevenue) {
+    // Destroy old charts if needed
+    if (window.divChart) window.divChart.destroy();
+    if (window.studentChart) window.studentChart.destroy();
+
+    window.divChart = new Chart(document.getElementById('studentDivisionChart'), {
+        type: 'bar',
+        data: {
+            labels: Object.keys(divisionRevenue),
+            datasets: [{
+                label: 'Revenue (₹)',
+                data: Object.values(divisionRevenue),
+                backgroundColor: ['#4e79a7', '#f28e2b', '#e15759', '#76b7b2']
+            }]
+        }
+    });
+
+    window.studentChart = new Chart(document.getElementById('monthlyRevenueChart'), {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], // placeholder
+            datasets: [{
+                label: 'Monthly Revenue',
+                data: [12000, 15000, 8000, 20000, 17000, 22000], // replace with Firestore aggregation later
+                borderColor: '#4e79a7',
+                fill: true
+            }]
+        }
+    });
+}
+
+loadStats();
