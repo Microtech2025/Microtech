@@ -1,0 +1,754 @@
+// student.js
+import { app, db, storage } from "../firebase.js";
+import {
+  collection,
+  getDocs,
+  updateDoc,
+  deleteDoc,
+  doc,
+  writeBatch,
+  query,
+  where,
+  addDoc,
+  setDoc,
+  Timestamp 
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
+// ============================== 
+// 📦 Elements
+// ============================== 
+const totalEl = document.getElementById("sm-stat-total");
+const activeEl = document.getElementById("sm-stat-active");
+const pendingEl = document.getElementById("sm-stat-pending");
+const completedEl = document.getElementById("sm-stat-completed");
+const studentsView = document.getElementById("sm-students-view");
+
+const filterName = document.getElementById("filter-name");
+const filterID = document.getElementById("filter-id");
+const filterCourse = document.getElementById("filter-course");
+const filterStatus = document.getElementById("filter-status");
+const filterFee = document.getElementById("filter-fee");
+
+const addStudentBtn = document.getElementById("btn-add-student");
+const bulkBtn = document.getElementById("btn-bulk-upload");
+const exportBtn = document.getElementById("btn-export-csv");
+const exportPdfBtn = document.getElementById("btn-export-pdf");
+
+// Add Student Modal Elements
+const addStudentModal = document.getElementById("add-student-modal");
+const addModalCloseBtn = document.getElementById("add-modal-close");
+const addStudentForm = document.getElementById("add-student-form");
+const divisionSelect = document.getElementById("add-division");
+
+let studentsData = [];
+let coursesData = [];
+
+// ============================== 
+// 📥 Fetch Data
+// ============================== 
+async function fetchData() {
+  await fetchCourses();
+  await fetchStudents();
+}
+
+async function fetchStudents() {
+  try {
+    console.log("[DEBUG] Fetching students...");
+    const snapshot = await getDocs(collection(db, "users"));
+    studentsData = snapshot.docs
+      .map((doc) => ({ id: doc.id, ...doc.data() }))
+      .filter((s) => s.role === "student");
+
+    console.log(`[DEBUG] Found ${studentsData.length} students.`);
+    renderStats();
+    renderStudents(studentsData);
+  } catch (err) {
+    showToast("Error loading students: " + err.message, "error");
+    console.error("Error fetching students:", err);
+  }
+}
+
+async function fetchCourses() {
+    try {
+        console.log("[DEBUG] Fetching courses...");
+        const snapshot = await getDocs(collection(db, "courses"));
+        coursesData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        console.log(`[DEBUG] Found ${coursesData.length} courses.`);
+        populateCourseDropdown();
+    } catch (err) {
+        showToast("Error loading courses: " + err.message, "error");
+        console.error("Error fetching courses:", err);
+    }
+}
+
+function populateCourseDropdown() {
+    const courseSelect = addStudentForm.querySelector('select[name="course"]');
+    if (!courseSelect) return;
+
+    courseSelect.innerHTML = '<option value="">-- Select Course --</option>'; // Reset
+    coursesData.forEach(course => {
+        const option = document.createElement('option');
+        option.value = course.name;
+        option.textContent = course.name;
+        courseSelect.appendChild(option);
+    });
+}
+
+// ============================== 
+// 📊 Update Stats
+// ============================== 
+function renderStats() {
+  totalEl.textContent = studentsData.length;
+  activeEl.textContent = studentsData.filter((s) => s.status === "Active").length;
+  pendingEl.textContent = studentsData.filter((s) => s.status === "Pending").length;
+  completedEl.textContent = studentsData.filter((s) => s.status === "Completed").length;
+}
+
+// ============================== 
+// 🖼 Render Students
+// ============================== 
+function renderStudents(data) {
+  if (!data.length) {
+    studentsView.innerHTML = `<p style="text-align:center; color:#9CA3AF;">No students found.</p>`;
+    return;
+  }
+
+  let html = `
+    <div class="table-container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Photo</th><th>ID</th><th>Name</th><th>Course</th><th>Status</th><th>Fee</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+  `;
+
+  data.forEach((student) => {
+    html += `
+      <tr>
+        <td><img src="${student.photoURL || 'https://via.placeholder.com/40'}" class="student-photo"></td>
+        <td>${student.studentID || "-"}</td>
+        <td>${student.name || "-"}</td>
+        <td>${student.course || student.courseType || "-"}</td>
+        <td><span class="badge ${getStatusBadge(student.status)}">${student.status || 'N/A'}</span></td>
+        <td>${student.feeStatus || "Pending"}</td>
+        <td>
+          <button class="sm-btn sm-btn-outline sm-btn-sm" onclick="showEditStudentModal('${student.id}')">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="sm-btn sm-red sm-btn-sm" onclick="deleteStudent('${student.id}')">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    `;
+  });
+
+  html += `</tbody></table></div>`;
+  studentsView.innerHTML = html;
+}
+
+function getStatusBadge(status) {
+  switch (status) {
+    case "Active": return "badge-success";
+    case "Pending": return "badge-warning";
+    case "Completed": return "badge-info";
+    case "Dropped": return "badge-danger";
+    default: return "";
+  }
+}
+
+// ============================== 
+// 🔍 Filters
+// ============================== 
+function applyFilters() {
+  let filtered = [...studentsData];
+
+  const nameVal = filterName.value.toLowerCase();
+  const idVal = filterID.value.toLowerCase();
+  const courseVal = filterCourse.value;
+  const statusVal = filterStatus.value;
+  const feeVal = filterFee.value;
+
+  filtered = filtered.filter((s) =>
+    (!nameVal || (s.name && s.name.toLowerCase().includes(nameVal))) &&
+    (!idVal || (s.studentID && s.studentID.toString().toLowerCase().includes(idVal))) &&
+    (!courseVal || (s.course || s.courseType) === courseVal) &&
+    (!statusVal || s.status === statusVal) &&
+    (!feeVal || s.feeStatus === feeVal)
+  );
+
+  renderStudents(filtered);
+}
+
+[filterName, filterID, filterCourse, filterStatus, filterFee].forEach((el) =>
+  el.addEventListener("input", applyFilters)
+);
+
+// ============================== 
+// ➕ Add Student Logic
+// ============================== 
+
+// --- Modal Handling ---
+addStudentBtn.addEventListener("click", () => {
+    addStudentModal.classList.add("show");
+});
+
+addModalCloseBtn.addEventListener("click", () => {
+    addStudentModal.classList.remove("show");
+    addStudentForm.reset();
+    toggleFormSections(""); // Hide all sections
+});
+
+// --- Dynamic Form Logic ---
+divisionSelect.addEventListener("change", (e) => {
+    toggleFormSections(e.target.value);
+});
+
+function toggleFormSections(division) {
+    const commonFields = document.getElementById("common-fields");
+    const lbsCaptFields = document.getElementById("lbs-capt-fields");
+    const parentFields = document.getElementById("parent-fields");
+    const photoUpload = document.getElementById("photo-upload-section");
+
+    // Hide all optional sections first
+    commonFields.style.display = "none";
+    lbsCaptFields.style.display = "none";
+    parentFields.style.display = "none";
+    photoUpload.style.display = "none";
+
+    // Disable all inputs within hidden sections to prevent them from being required
+    [...lbsCaptFields.querySelectorAll('input, select')].forEach(el => el.required = false);
+
+    if (division === "LBS" || division === "CAPT") {
+        commonFields.style.display = "block";
+        lbsCaptFields.style.display = "block";
+        parentFields.style.display = "block";
+        photoUpload.style.display = "block";
+        // Re-enable required fields for this view
+        [...lbsCaptFields.querySelectorAll('input, select')].forEach(el => el.required = true);
+    } else if (division === "Gama") {
+        commonFields.style.display = "block";
+        parentFields.style.display = "block";
+        photoUpload.style.display = "block";
+    }
+}
+
+// --- Auto-calculate Age ---
+addStudentForm.querySelector('input[name="dob"]').addEventListener('change', (e) => {
+    const dob = e.target.value;
+    if (dob) {
+        const age = new Date().getFullYear() - new Date(dob).getFullYear();
+        addStudentForm.querySelector('input[name="age"]').value = age;
+    }
+});
+
+// --- Form Submission ---
+addStudentForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const submitBtn = document.getElementById("add-student-submit-btn");
+    const originalBtnText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+    try {
+        const formData = new FormData(addStudentForm);
+        const data = Object.fromEntries(formData.entries());
+        console.log("[DEBUG] Initial form data:", data);
+
+        // --- Validation ---
+        const division = data.division;
+        const requiredFields = {
+            common: ['name', 'presentAddress', 'dob', 'sex', 'nationality', 'mobile', 'guardianName', 'permanentAddress', 'parentOccupation', 'parentContact', 'photo'],
+            lbs_capt: ['educationalQualifications', 'course']
+        };
+
+        let missingField = requiredFields.common.find(f => !data[f]);
+        if (!missingField && (division === 'LBS' || division === 'CAPT')) {
+            missingField = requiredFields.lbs_capt.find(f => !data[f]);
+        }
+
+        if (missingField) {
+            // Convert camelCase to Title Case for display
+            const fieldName = missingField.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+            throw new Error(`${fieldName} is required.`);
+        }
+
+        // --- Student ID Generation ---
+        let studentID = data.studentID;
+        if (data.autoGenerateID === 'on') {
+            studentID = await generateStudentID(division);
+            console.log("[DEBUG] Generated Student ID:", studentID);
+        }
+        if (!studentID) {
+            throw new Error("Student ID is missing or could not be generated.");
+        }
+
+        // --- Photo Upload ---
+        const photoFile = data.photo;
+        const photoRef = ref(storage, `student-photos/${studentID}`);
+        console.log("[DEBUG] Uploading photo to:", photoRef.fullPath);
+        await uploadBytes(photoRef, photoFile);
+        const photoURL = await getDownloadURL(photoRef);
+        console.log("[DEBUG] Photo uploaded, URL:", photoURL);
+
+        // --- Build Firestore Payload ---
+        const studentPayload = buildStudentPayload(data, studentID, photoURL);
+        console.log("[DEBUG] Firestore payload:", studentPayload);
+
+        // --- Save to Firestore ---
+        await setDoc(doc(db, "users", studentID), studentPayload);
+        console.log("[DEBUG] Student saved to Firestore.");
+
+        showToast("Student added successfully!", "success");
+        addStudentModal.classList.remove("show");
+        addStudentForm.reset();
+        toggleFormSections('');
+        fetchStudents(); // Refresh list
+
+    } catch (error) {
+        console.error("[DEBUG] Add student error:", error);
+        showToast(error.message, "error");
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+    }
+});
+
+// --- Helper Functions ---
+async function generateStudentID(division) {
+    const year = new Date().getFullYear().toString().slice(-2);
+    const prefix = { LBS: 'LBS', CAPT: 'CPT', Gama: 'GMA' }[division];
+    
+    // This is a simplified counter. For production, a server-side atomic counter is better.
+    const q = query(collection(db, "users"), where("division", "==", division));
+    const snapshot = await getDocs(q);
+    const count = snapshot.size + 1;
+    const runningNum = count.toString().padStart(4, '0');
+
+    return `${prefix}${year}${runningNum}`;
+}
+
+function buildStudentPayload(data, studentID, photoURL) {
+    const payload = {
+        // Common fields
+        studentID: studentID,
+        division: data.division,
+        name: data.name,
+        presentAddress: data.presentAddress,
+        dob: data.dob,
+        age: data.age,
+        sex: data.sex,
+        nationality: data.nationality,
+        mobile: data.mobile,
+        email: data.email || '',
+        photoURL: photoURL,
+
+        // Parent/Guardian fields
+        guardianName: data.guardianName,
+        permanentAddress: data.permanentAddress,
+        parentOccupation: data.parentOccupation,
+        parentContact: data.parentContact,
+
+        // Timestamps & Role
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
+        role: 'student',
+        status: 'Active', // Default status
+        feeStatus: 'Pending' // Default fee status
+    };
+
+    // Division-specific fields
+    if (data.division === 'LBS' || data.division === 'CAPT') {
+        payload.educationalQualifications = data.educationalQualifications;
+        payload.course = data.course;
+    }
+    
+    // For Gama, no extra fields are needed based on the prompt
+
+    return payload;
+}
+
+
+// ============================== 
+// 📝 Edit Student Logic (Existing)
+// ============================== 
+// This section is kept for editing functionality. A full implementation would require a separate modal and logic.
+window.showEditStudentModal = (id) => {
+    // Placeholder for edit functionality.
+    // You would typically open a modal pre-filled with the student's data.
+    showToast(`Edit functionality for student ${id} is not fully implemented in this script.`, "info");
+    const student = studentsData.find(s => s.id === id);
+    if (student) {
+        console.log("Editing student:", student);
+        // In a full app, you'd open a modal here, similar to the add modal.
+        // For now, we just log the data.
+    }
+};
+
+
+// ============================== 
+// 🗑 Delete Student
+// ============================== 
+window.deleteStudent = async (id) => {
+  if (confirm("Are you sure you want to delete this student?")) {
+    try {
+        console.log(`[DEBUG] Deleting student with ID: ${id}`);
+        // Also delete photo from storage
+        const student = studentsData.find(s => s.id === id);
+        if (student && student.photoURL) {
+            const photoRef = ref(storage, student.photoURL);
+            await deleteObject(photoRef).catch(err => console.warn("Could not delete photo:", err));
+            console.log("[DEBUG] Student photo deleted from Storage.");
+        }
+
+        await deleteDoc(doc(db, "users", id));
+        showToast("Student deleted successfully", "success");
+        fetchStudents(); // Refresh list
+    } catch (error) {
+        console.error("[DEBUG] Error deleting student:", error);
+        showToast(`Error deleting student: ${error.message}`, "error");
+    }
+  }
+};
+
+// ============================== 
+// 📤 Export & Bulk Upload (Existing)
+// ============================== 
+exportBtn.addEventListener("click", () => {
+  const rows = [["ID", "Name", "Course", "Status", "Fee"]];
+  studentsData.forEach((s) => {
+    rows.push([s.studentID, s.name, s.course || s.courseType, s.status, s.feeStatus]);
+  });
+
+  const csv = rows.map((r) => r.join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "students.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+bulkBtn.addEventListener("click", () => {
+    // Placeholder for bulk upload functionality
+    showToast("Bulk upload is not implemented in this script.", "info");
+});
+
+exportPdfBtn.addEventListener("click", async () => {
+    // Placeholder for PDF export
+    showToast("PDF export is not implemented in this script.", "info");
+});
+
+
+// ============================== 
+// 🔔 Toast Notifications
+// ============================== 
+function showToast(message, type = "info") {
+  const container = document.getElementById("toast-container");
+  if (!container) return;
+  const toast = document.createElement("div");
+  toast.className = `notification notification-${type}`;
+  toast.textContent = message;
+
+  container.appendChild(toast);
+  setTimeout(() => {
+      toast.style.opacity = '0';
+      setTimeout(() => toast.remove(), 500);
+  }, 4000);
+}
+
+// ============================== 
+// 🚀 Init
+// ============================== 
+fetchData();
+
+// ============================== 
+// 📤 Export & Bulk Upload
+// ============================== 
+exportBtn.addEventListener("click", () => {
+  const rows = [["ID", "Name", "Course", "Status", "Fee"]];
+  studentsData.forEach((s) => {
+    rows.push([s.studentID, s.name, s.course || s.courseType, s.status, s.feeStatus]);
+  });
+
+  const csv = rows.map((r) => r.join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "students.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+bulkBtn.addEventListener("click", () => {
+    showBulkUploadModal();
+});
+
+function getBulkUploadTemplate(division) {
+    const commonFields = "name,gender,dob,guardianName,guardianOccupation,address,district,state,country,zip,email,mobile,school,admissionDate";
+    if (division === 'CAPT') {
+        return `${commonFields},course,batchTiming,feePlan,optionalAddons`;
+    } else if (division === 'LBS') {
+        return `${commonFields},course,preferredSchedule,courseLevel,feeStructure,internshipOption`;
+    } else if (division === 'Gama') {
+        return `${commonFields},currentGrade,schoolName,guardianConsent,batchPreference`;
+    }
+    return '';
+}
+
+function showBulkUploadModal() {
+    const modal = document.createElement("div");
+    modal.className = "modal show";
+    modal.innerHTML = `
+        <div class="modal-content" style="max-width:600px;">
+            <div class="modal-header">
+                <div class="modal-title">Bulk Upload Students</div>
+                <button type="button" class="modal-close" aria-label="Close" >&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Select Division</label>
+                    <select class="form-control" id="bulk-upload-division">
+                        <option value="">Select Division</option>
+                        <option value="CAPT">CAPT</option>
+                        <option value="LBS">LBS</option>
+                        <option value="Gama">Gama</option>
+                    </select>
+                </div>
+                <div id="bulk-upload-content" style="display:none;">
+                    <p>Upload a CSV file with the following columns:</p>
+                    <strong id="csv-headers"></strong>
+                    <a href="#" id="download-template" class="sm-btn sm-green" style="margin-top:10px; margin-bottom:20px;">Download CSV Template</a>
+                    <input type="file" id="bulk-csv-input" accept=".csv" class="form-control">
+                    <div id="bulk-upload-results" style="margin-top:20px;"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="sm-btn" id="upload-csv-btn" style="display:none;">Upload and Process</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    const divisionSelect = modal.querySelector('#bulk-upload-division');
+    const bulkUploadContent = modal.querySelector('#bulk-upload-content');
+    const csvHeaders = modal.querySelector('#csv-headers');
+    const downloadTemplateBtn = modal.querySelector('#download-template');
+    const uploadBtn = modal.querySelector('#upload-csv-btn');
+
+    divisionSelect.addEventListener('change', () => {
+        const division = divisionSelect.value;
+        if (division) {
+            const headers = getBulkUploadTemplate(division);
+            csvHeaders.textContent = headers;
+            bulkUploadContent.style.display = 'block';
+            uploadBtn.style.display = 'inline-block';
+        } else {
+            bulkUploadContent.style.display = 'none';
+            uploadBtn.style.display = 'none';
+        }
+    });
+
+    downloadTemplateBtn.onclick = (e) => {
+        e.preventDefault();
+        const division = divisionSelect.value;
+        const headers = getBulkUploadTemplate(division);
+        const blob = new Blob([headers], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${division.toLowerCase()}_student_template.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+    };
+
+    uploadBtn.onclick = async () => {
+        const division = divisionSelect.value;
+        const fileInput = modal.querySelector("#bulk-csv-input");
+        const file = fileInput.files[0];
+        if (!file) {
+            showToast("Please select a CSV file to upload.", "error");
+            return;
+        }
+
+        const resultsContainer = modal.querySelector("#bulk-upload-results");
+        resultsContainer.innerHTML = "Processing...";
+
+        const text = await file.text();
+        const lines = text.split("\n").filter(line => line.trim() !== "");
+        const headers = lines[0].split(",").map(h => h.trim());
+        const rows = lines.slice(1);
+
+        const batch = writeBatch(db);
+        let successCount = 0;
+        let errorCount = 0;
+        let errors = [];
+
+        for (let i = 0; i < rows.length; i++) {
+            const values = rows[i].split(",").map(v => v.trim());
+            const studentData = headers.reduce((obj, header, index) => {
+                obj[header] = values[index];
+                return obj;
+            }, {});
+
+            if (!studentData.name || !studentData.mobile) {
+                errorCount++;
+                errors.push(`Row ${i + 2}: Missing name or mobile.`);
+                continue;
+            }
+
+            const newDocRef = doc(collection(db, "users"));
+            batch.set(newDocRef, {
+                ...studentData,
+                division,
+                role: "student",
+                status: "Active",
+                feeStatus: "Pending",
+                createdAt: Date.now(),
+            });
+            successCount++;
+        }
+
+        try {
+            await batch.commit();
+            resultsContainer.innerHTML = `
+                <p style="color: #10B981;">Successfully uploaded ${successCount} students.</p>
+                <p style="color: #EF4444;">Failed to upload ${errorCount} students.</p>
+                <ul>${errors.map(e => `<li>${e}</li>`).join("\n")}</ul>
+            `;
+            fetchStudents();
+        } catch (err) {
+            resultsContainer.innerHTML = `<p style="color: #EF4444;">Error committing batch: ${err.message}</p>`;
+        }
+    };
+
+    modal.querySelector(".modal-close").onclick = () => modal.remove();
+}
+
+exportPdfBtn.addEventListener("click", async () => {
+    exportPdfBtn.disabled = true;
+    exportPdfBtn.innerHTML =
+        '<i class="fas fa-spinner fa-spin"></i> Exporting...';
+
+    try {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF();
+
+        const printableArea = document.createElement('div');
+        printableArea.style.position = 'absolute';
+        printableArea.style.left = '-9999px';
+        printableArea.style.width = '210mm'; // A4 width
+        document.body.appendChild(printableArea);
+
+        let content = '<h1>Student List</h1>';
+        for (const student of studentsData) {
+            content += `
+                <div style="display:flex; align-items:center; border-bottom: 1px solid #ccc; padding: 10px 0;">
+                    <img src="${student.photoURL || ''}" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 20px; object-fit: cover;" crossorigin="anonymous">
+                    <div>
+                        <p><strong>Name:</strong> ${student.name}</p>
+                        <p><strong>ID:</strong> ${student.studentID}</p>
+                        <p><strong>Course:</strong> ${student.course}</p>
+                    </div>
+                </div>
+            `;
+        }
+        printableArea.innerHTML = content;
+
+        const canvas = await html2canvas(printableArea, { 
+            scale: 2, 
+            useCORS: true, 
+            allowTaint: true 
+        });
+        const imgData = canvas.toDataURL('image/png');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save('students.pdf');
+    } catch (error) {
+        showToast("Error generating PDF: " + error.message, "error");
+    } finally {
+        exportPdfBtn.disabled = false;
+        exportPdfBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Export PDF';
+        if (document.querySelector('div[style*="left: -9999px"]')) {
+            document.body.removeChild(document.querySelector('div[style*="left: -9999px"]'));
+        }
+    }
+});
+
+// ============================== 
+// 📝 Edit Student Logic (Existing)
+// ============================== 
+// This section is kept for editing functionality. A full implementation would require a separate modal and logic.
+window.showEditStudentModal = (id) => {
+    // Placeholder for edit functionality.
+    // You would typically open a modal pre-filled with the student's data.
+    showToast(`Edit functionality for student ${id} is not fully implemented in this script.`, "info");
+    const student = studentsData.find(s => s.id === id);
+    if (student) {
+        console.log("Editing student:", student);
+        // In a full app, you'd open a modal here, similar to the add modal.
+        // For now, we just log the data.
+    }
+};
+
+
+// ============================== 
+// 🗑 Delete Student
+// ============================== 
+window.deleteStudent = async (id) => {
+  if (confirm("Are you sure you want to delete this student?")) {
+    try {
+        console.log(`[DEBUG] Deleting student with ID: ${id}`);
+        // Also delete photo from storage
+        const student = studentsData.find(s => s.id === id);
+        if (student && student.photoURL) {
+            const photoRef = ref(storage, student.photoURL);
+            await deleteObject(photoRef).catch(err => console.warn("Could not delete photo:", err));
+            console.log("[DEBUG] Student photo deleted from Storage.");
+        }
+
+        await deleteDoc(doc(db, "users", id));
+        showToast("Student deleted successfully", "success");
+        fetchStudents(); // Refresh list
+    } catch (error) {
+        console.error("[DEBUG] Error deleting student:", error);
+        showToast(`Error deleting student: ${error.message}`, "error");
+    }
+  }
+};
+
+// ============================== 
+// 📤 Export & Bulk Upload (Existing)
+// ============================== 
+exportBtn.addEventListener("click", () => {
+  const rows = [["ID", "Name", "Course", "Status", "Fee"]];
+  studentsData.forEach((s) => {
+    rows.push([s.studentID, s.name, s.course || s.courseType, s.status, s.feeStatus]);
+  });
+
+  const csv = rows.map((r) => r.join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "students.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+bulkBtn.addEventListener("click", () => {
+    // Placeholder for bulk upload functionality
+    showToast("Bulk upload is not implemented in this script.", "info");
+});
+
+exportPdfBtn.addEventListener("click", async () => {
+    // Placeholder for PDF export
+    showToast("PDF export is not implemented in this script.", "info");
+});
+

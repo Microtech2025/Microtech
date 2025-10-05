@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - MicroTech Center</title>
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Left Sidebar -->
+        <div class="left-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="logo-text">MicroTech Center</div>
+                </div>
+                <div class="sidebar-subtitle">System Settings</div>
+            </div>
+            
+            <div class="sidebar-search">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" placeholder="Search settings...">
+                </div>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="admin-dashboard.html" class="nav-item">
+                    <i class="fas fa-home nav-icon"></i>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="revenue.html" class="nav-item">
+                    <i class="fas fa-dollar-sign nav-icon"></i>
+                    <span class="nav-text">Revenue Management</span>
+                </a>
+                <a href="student.html" class="nav-item">
+                    <i class="fas fa-users nav-icon"></i>
+                    <span class="nav-text">Students</span>
+                </a>
+                <a href="staff.html" class="nav-item">
+                    <i class="fas fa-user-tie nav-icon"></i>
+                    <span class="nav-text">Staff</span>
+                </a>
+                <a href="counselors.html" class="nav-item">
+                    <i class="fas fa-phone nav-icon"></i>
+                    <span class="nav-text">Counselors</span>
+                </a>
+                <a href="courses.html" class="nav-item">
+                    <i class="fas fa-book-open nav-icon"></i>
+                    <span class="nav-text">Courses & Academics</span>
+                </a>
+                <a href="fees.html" class="nav-item">
+                    <i class="fas fa-credit-card nav-icon"></i>
+                    <span class="nav-text">Fee Management</span>
+                </a>
+                <a href="communication.html" class="nav-item">
+                    <i class="fas fa-comments nav-icon"></i>
+                    <span class="nav-text">Communication</span>
+                </a>
+                <a href="advertisement.html" class="nav-item">
+                    <i class="fas fa-bullhorn nav-icon"></i>
+                    <span class="nav-text">Advertisement</span>
+                </a>
+                <a href="alumni.html" class="nav-item">
+                    <i class="fas fa-graduation-cap nav-icon"></i>
+                    <span class="nav-text">Alumni Portal</span>
+                </a>
+                <a href="scholarship.html" class="nav-item">
+                    <i class="fas fa-shield-alt nav-icon"></i>
+                    <span class="nav-text">Scholarship & Offers</span>
+                </a>
+                <a href="referral.html" class="nav-item">
+                    <i class="fas fa-share-alt nav-icon"></i>
+                    <span class="nav-text">Referral Program</span>
+                </a>
+                <a href="analytics.html" class="nav-item">
+                    <i class="fas fa-chart-bar nav-icon"></i>
+                    <span class="nav-text">Analytics & Reports</span>
+                </a>
+                <a href="notifications.html" class="nav-item">
+                    <i class="fas fa-bell nav-icon"></i>
+                    <span class="nav-text">Notifications</span>
+                </a>
+                <a href="settings.html" class="nav-item active">
+                    <i class="fas fa-cog nav-icon"></i>
+                    <span class="nav-text">Settings</span>
+                </a>
+                <a href="cloud.html" class="nav-item">
+                    <i class="fas fa-cloud nav-icon"></i>
+                    <span class="nav-text">Cloud</span>
+                </a>
+                <a href="expenses.html" class="nav-item">
+                    <i class="fas fa-wallet nav-icon"></i>
+                    <span class="nav-text">Expenses</span>
+                </a>
+                <a href="finance.html" class="nav-item">
+                    <i class="fas fa-chart-line nav-icon"></i>
+                    <span class="nav-text">Finance</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Top Header -->
+            <div class="top-header">
+                <div class="header-search">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" placeholder="Search settings...">
+                </div>
+                
+                <div class="header-right">
+                    <div class="notifications">
+                        <i class="fas fa-bell bell-icon"></i>
+                        <span class="notification-badge">2</span>
+                    </div>
+                    
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">Admin User</div>
+                            <div class="user-role">Administrator</div>
+                        </div>
+                        <i class="fas fa-chevron-down user-dropdown"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Title -->
+            <div class="page-title">System Settings</div>
+            <div class="page-subtitle">Configure system preferences, user management, and security settings</div>
+
+            <!-- Settings Navigation -->
+            <div class="settings-nav">
+                <button class="nav-tab active" data-tab="general">
+                    <i class="fas fa-cog"></i>
+                    General
+                </button>
+                <button class="nav-tab" data-tab="users">
+                    <i class="fas fa-users"></i>
+                    Users & Roles
+                </button>
+                <button class="nav-tab" data-tab="security">
+                    <i class="fas fa-shield-alt"></i>
+                    Security
+                </button>
+                <button class="nav-tab" data-tab="notifications">
+                    <i class="fas fa-bell"></i>
+                    Notifications
+                </button>
+                <button class="nav-tab" data-tab="backup">
+                    <i class="fas fa-database"></i>
+                    Backup & Restore
+                </button>
+                <button class="nav-tab" data-tab="advanced">
+                    <i class="fas fa-tools"></i>
+                    Advanced
+                </button>
+            </div>
+
+            <!-- General Settings Tab -->
+            <div class="settings-content active" id="general">
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-title">General Settings</div>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="saveGeneralSettings()">
+                                <i class="fas fa-save"></i>
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Institution Name</label>
+                                <input type="text" class="form-control" id="institutionName" value="MicroTech Center">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Institution Code</label>
+                                <input type="text" class="form-control" id="institutionCode" value="MTC001">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Contact Email</label>
+                                <input type="email" class="form-control" id="contactEmail" value="info@microtechcenter.com">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Contact Phone</label>
+                                <input type="tel" class="form-control" id="contactPhone" value="+91-1234567890">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Address</label>
+                                <textarea class="form-control" id="institutionAddress" rows="3">123 Tech Street, Digital City, India</textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Website</label>
+                                <input type="url" class="form-control" id="institutionWebsite" value="https://microtechcenter.com">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Default Currency</label>
+                                <select class="form-control" id="defaultCurrency">
+                                    <option value="INR" selected>Indian Rupee (₹)</option>
+                                    <option value="USD">US Dollar ($)</option>
+                                    <option value="EUR">Euro (€)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Time Zone</label>
+                                <select class="form-control" id="timeZone">
+                                    <option value="Asia/Kolkata" selected>Asia/Kolkata (IST)</option>
+                                    <option value="UTC">UTC</option>
+                                    <option value="America/New_York">America/New_York (EST)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Date Format</label>
+                                <select class="form-control" id="dateFormat">
+                                    <option value="DD/MM/YYYY" selected>DD/MM/YYYY</option>
+                                    <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                    <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Language</label>
+                                <select class="form-control" id="language">
+                                    <option value="en" selected>English</option>
+                                    <option value="hi">Hindi</option>
+                                    <option value="ta">Tamil</option>
+                                    <option value="te">Telugu</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users & Roles Tab -->
+            <div class="settings-content" id="users">
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-title">User Management</div>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="openAddUserModal()">
+                                <i class="fas fa-plus"></i>
+                                Add User
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="table" id="usersTable">
+                            <thead>
+                                <tr>
+                                    <th>User ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Last Login</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <!-- User data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-title">Role Permissions</div>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="saveRolePermissions()">
+                                <i class="fas fa-save"></i>
+                                Save Permissions
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="permissions-grid">
+                        <div class="permission-section">
+                            <h4>Administrator</h4>
+                            <div class="permission-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" checked disabled>
+                                    <span class="checkmark"></span>
+                                    Full Access
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-section">
+                            <h4>Manager</h4>
+                            <div class="permission-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" checked>
+                                    <span class="checkmark"></span>
+                                    View Students
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" checked>
+                                    <span class="checkmark"></span>
+                                    Manage Fees
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                    Manage Staff
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="permission-section">
+                            <h4>Counselor</h4>
+                            <div class="permission-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" checked>
+                                    <span class="checkmark"></span>
+                                    View Students
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" checked>
+                                    <span class="checkmark"></span>
+                                    Record Payments
+                                </label>
+                            </div>
+                            <div class="permission-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                    Manage Fees
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Tab -->
+            <div class="settings-content" id="security">
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-title">Security Settings</div>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="saveSecuritySettings()">
+                                <i class="fas fa-save"></i>
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Session Timeout (minutes)</label>
+                                <input type="number" class="form-control" id="sessionTimeout" value="30" min="5" max="480">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Password Expiry (days)</label>
+                                <input type="number" class="form-control" id="passwordExpiry" value="90" min="30" max="365">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Minimum Password Length</label>
+                                <input type="number" class="form-control" id="minPasswordLength" value="8" min="6" max="20">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Require Special Characters</label>
+                                <select class="form-control" id="requireSpecialChars">
+                                    <option value="true" selected>Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Two-Factor Authentication</label>
+                                <select class="form-control" id="twoFactorAuth">
+                                    <option value="enabled" selected>Enabled</option>
+                                    <option value="disabled">Disabled</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Login Attempts Before Lockout</label>
+                                <input type="number" class="form-control" id="maxLoginAttempts" value="5" min="3" max="10">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">IP Whitelist</label>
+                            <textarea class="form-control" id="ipWhitelist" rows="3" placeholder="Enter allowed IP addresses (one per line)"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications Tab -->
+            <div class="settings-content" id="notifications">
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-title">Notification Preferences</div>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="saveNotificationSettings()">
+                                <i class="fas fa-save"></i>
+                                Save Preferences
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-form">
+                        <div class="notification-section">
+                            <h4>Email Notifications</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="emailNewStudent" checked>
+                                        <span class="checkmark"></span>
+                                        New Student Registration
+                                    </label>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="emailPayment" checked>
+                                        <span class="checkmark"></span>
+                                        Payment Received
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="emailOverdue" checked>
+                                        <span class="checkmark"></span>
+                                        Overdue Payments
+                                    </label>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="emailSystem" checked>
+                                        <span class="checkmark"></span>
+                                        System Alerts
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="notification-section">
+                            <h4>WhatsApp Notifications</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="whatsappPayment">
+                                        <span class="checkmark"></span>
+                                        Payment Confirmations
+                                    </label>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="whatsappReminders">
+                                        <span class="checkmark"></span>
+                                        Payment Reminders
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="notification-section">
+                            <h4>In-App Notifications</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="inAppAll" checked>
+                                        <span class="checkmark"></span>
+                                        All Notifications
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Backup & Restore Tab -->
+            <div class="settings-content" id="backup">
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-title">Backup & Restore</div>
+                        <div class="card-actions">
+                            <button class="btn btn-success" onclick="createBackup()">
+                                <i class="fas fa-download"></i>
+                                Create Backup
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="backup-info">
+                        <div class="info-item">
+                            <span class="info-label">Last Backup:</span>
+                            <span class="info-value" id="lastBackupDate">Never</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Backup Size:</span>
+                            <span class="info-value" id="lastBackupSize">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Auto Backup:</span>
+                            <span class="info-value" id="autoBackupStatus">Disabled</span>
+                        </div>
+                    </div>
+                    
+                    <div class="backup-actions">
+                        <div class="action-group">
+                            <h4>Manual Backup</h4>
+                            <button class="btn btn-outline" onclick="downloadBackup()">
+                                <i class="fas fa-download"></i>
+                                Download Latest Backup
+                            </button>
+                        </div>
+                        
+                        <div class="action-group">
+                            <h4>Restore</h4>
+                            <input type="file" id="restoreFile" accept=".json,.zip" style="display: none;">
+                            <button class="btn btn-warning" onclick="document.getElementById('restoreFile').click()">
+                                <i class="fas fa-upload"></i>
+                                Choose Backup File
+                            </button>
+                            <button class="btn btn-danger" onclick="restoreBackup()" id="restoreBtn" disabled>
+                                <i class="fas fa-undo"></i>
+                                Restore
+                            </button>
+                        </div>
+                        
+                        <div class="action-group">
+                            <h4>Auto Backup Settings</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Enable Auto Backup</label>
+                                    <select class="form-control" id="autoBackupEnabled">
+                                        <option value="false" selected>Disabled</option>
+                                        <option value="true">Enabled</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Backup Frequency</label>
+                                    <select class="form-control" id="backupFrequency">
+                                        <option value="daily">Daily</option>
+                                        <option value="weekly" selected>Weekly</option>
+                                        <option value="monthly">Monthly</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Tab -->
+            <div class="settings-content" id="advanced">
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-title">Advanced Settings</div>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="saveAdvancedSettings()">
+                                <i class="fas fa-save"></i>
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Debug Mode</label>
+                                <select class="form-control" id="debugMode">
+                                    <option value="false" selected>Disabled</option>
+                                    <option value="true">Enabled</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Log Level</label>
+                                <select class="form-control" id="logLevel">
+                                    <option value="error">Error Only</option>
+                                    <option value="warn" selected>Warning</option>
+                                    <option value="info">Info</option>
+                                    <option value="debug">Debug</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Cache TTL (seconds)</label>
+                                <input type="number" class="form-control" id="cacheTTL" value="3600" min="60" max="86400">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Max File Upload Size (MB)</label>
+                                <input type="number" class="form-control" id="maxFileSize" value="10" min="1" max="100">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Custom CSS</label>
+                            <textarea class="form-control" id="customCSS" rows="6" placeholder="Enter custom CSS rules..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Custom JavaScript</label>
+                            <textarea class="form-control" id="customJS" rows="6" placeholder="Enter custom JavaScript code..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-title">System Information</div>
+                    </div>
+                    
+                    <div class="system-info">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">System Version:</span>
+                                <span class="info-value">1.0.0</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Database:</span>
+                                <span class="info-value">Firebase Firestore</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Last Updated:</span>
+                                <span class="info-value" id="systemLastUpdated">2024-01-01</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Uptime:</span>
+                                <span class="info-value" id="systemUptime">0 days</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add User Modal -->
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Add New User</div>
+                <button class="modal-close" onclick="closeAddUserModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="addUserForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Full Name *</label>
+                        <input type="text" class="form-control" id="userName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Email *</label>
+                        <input type="email" class="form-control" id="userEmail" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Role *</label>
+                        <select class="form-control" id="userRole" required>
+                            <option value="">Select Role</option>
+                            <option value="admin">Administrator</option>
+                            <option value="manager">Manager</option>
+                            <option value="counselor">Counselor</option>
+                            <option value="staff">Staff</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select class="form-control" id="userStatus">
+                            <option value="active" selected>Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Temporary Password</label>
+                    <input type="text" class="form-control" id="tempPassword" value="changeme123" readonly>
+                    <small class="form-hint">User will be prompted to change this password on first login</small>
+                </div>
+                
+                <div class="card-actions" style="justify-content: flex-end; margin-top: 20px;">
+                    <button type="button" class="btn btn-outline" onclick="closeAddUserModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast notification container -->
+    <div id="toast-container" style="position:fixed;top:24px;right:24px;z-index:9999;"></div>
+    <!-- Notification Container -->
+    <div id="notificationContainer"></div>
+
+    <script src="firebase.js"></script>
+    <script type="module" src="js/toast.js"></script>
+    <script type="module" src="js/settings.js"></script>
+</body>
+</html>
+
+
+

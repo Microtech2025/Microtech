@@ -1,0 +1,110 @@
+Create a fully working Add Student (single student) feature for my Student Management System that works with Firebase Firestore 
+
+🔹 Requirements:
+
+Division-based logic:
+
+LBS & CAPT students must have the following fields:
+
+NAME OF THE STUDENT
+
+PRESENT ADDRESS
+
+DATE OF BIRTH
+
+AGE
+
+SEX
+
+NATIONALITY
+
+MOBILE NO.
+
+EMAIL
+
+EDUCATIONAL QUALIFICATIONS
+
+NAME OF FATHER/MOTHER/GUARDIAN
+
+PERMANENT ADDRESS
+
+PARENT OCCUPATION
+
+PARENT CONTACT NO.
+
+NAME OF COURSE ADMITTED (select from course list)
+
+A PASSPORT SIZE PHOTO
+
+Gama Abacus students must have simplified fields (remove course select and fixed fee inputs):
+
+NAME OF THE STUDENT
+
+PRESENT ADDRESS
+
+DATE OF BIRTH
+
+AGE
+
+SEX
+
+NATIONALITY
+
+MOBILE NO.
+
+EMAIL
+
+NAME OF FATHER/MOTHER/GUARDIAN
+
+PERMANENT ADDRESS
+
+PARENT OCCUPATION
+
+PARENT CONTACT NO.
+
+A PASSPORT SIZE PHOTO
+(no fixed fee, because Gama has monthly fee that varies)
+
+Form Handling:
+
+Division is always stored (division: LBS | CAPT | Gama).
+
+Auto-generate student ID if checkbox is selected.
+
+Photo uploads to student-photos/{studentID} in Firebase Storage.
+
+Save data to Firestore in users collection with timestamp fields (createdAt, updatedAt).
+
+Validation:
+
+All required fields must be filled.
+
+Show toast if any field is missing.
+
+Gama Abacus form should skip course and fee-related validation.
+
+UI / Modal:
+
+Clicking Add Student button opens a modal with the correct form for the chosen division.
+
+Modal submit calls the Add Student function.
+
+On success → show toast, close modal, refresh student list.
+
+On error → show toast with error, reset button text.
+
+Code Style:
+
+Use async/await.
+
+Wrap Firebase calls with try...catch.
+
+Console log debug steps ([DEBUG]) for easier tracing.
+
+Keep code modular with helpers:
+
+generateStudentID(division, admissionDate)
+
+buildStudentPayload(data, studentID, photoURL)
+
+fetchStudents()

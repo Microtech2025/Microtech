@@ -3,123 +3,538 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="apple-touch-icon" href="../micro-tech-center.jpg.png">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="admin-dashboard.css">
+    <title>Staff Management - MicroTech Center</title>
     <link rel="stylesheet" href="css/staff.css">
+    <link rel="stylesheet" href="css/notifications.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="dark-theme">
-
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h2>MicroTech</h2>
-            <button class="close-btn" id="closeSidebar"><i class="fas fa-times"></i></button>
-        </div>
-        <nav class="sidebar-menu">
-            <a href="admin-dashboard.html" class="active"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a>
-            <a href="student.html"><i class="fas fa-users"></i> <span>Students</span></a>
-            <a href="staff.html"><i class="fas fa-user-tie"></i> <span>Staff</span></a>
-            <a href="finance.html"><i class="fas fa-money-bill-wave"></i> <span>Finance</span></a>
-            <a href="fees.html"><i class="fas fa-money-bill-wave"></i> <span>Fees</span></a>
-            <a href="marketing.html"><i class="fas fa-bullhorn"></i> <span>Marketing</span></a>
-            <a href="settings.html"><i class="fas fa-cogs"></i> <span>Settings</span></a>
-        </nav>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Top Navbar -->
-        <header class="topbar">
-            <button class="menu-btn" id="openSidebar"><i class="fas fa-bars"></i></button>
-            <div class="topbar-actions">
-                <button id="themeToggle" title="Toggle Theme"><i class="fas fa-moon"></i></button>
-                <button title="Notifications"><i class="fas fa-bell"></i></button>
-                <div class="profile">
-                    <img src="../micro-tech-center.jpg.png" alt="Profile">
+<body>
+    <div class="dashboard-container">
+        <!-- Left Sidebar -->
+        <div class="left-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="logo-text">MicroTech Center</div>
+                </div>
+                <div class="sidebar-subtitle">Staff Management System</div>
+            </div>
+            
+            <div class="sidebar-search">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" placeholder="Search staff...">
                 </div>
             </div>
-        </header>
+            
+            <nav class="nav-menu">
+                <a href="admin-dashboard.html" class="nav-item">
+                    <i class="fas fa-home nav-icon"></i>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="revenue.html" class="nav-item">
+                    <i class="fas fa-dollar-sign nav-icon"></i>
+                    <span class="nav-text">Revenue Management</span>
+                </a>
+                <a href="student.html" class="nav-item">
+                    <i class="fas fa-users nav-icon"></i>
+                    <span class="nav-text">Students</span>
+                </a>
+                <a href="staff.html" class="nav-item active">
+                    <i class="fas fa-user-tie nav-icon"></i>
+                    <span class="nav-text">Staff</span>
+                </a>
+                <a href="counselors.html" class="nav-item">
+                    <i class="fas fa-phone nav-icon"></i>
+                    <span class="nav-text">Counselors</span>
+                </a>
+                <a href="courses.html" class="nav-item">
+                    <i class="fas fa-book-open nav-icon"></i>
+                    <span class="nav-text">Courses & Academics</span>
+                </a>
+                <a href="fees.html" class="nav-item">
+                    <i class="fas fa-credit-card nav-icon"></i>
+                    <span class="nav-text">Fee Management</span>
+                </a>
+                <a href="communication.html" class="nav-item">
+                    <i class="fas fa-comments nav-icon"></i>
+                    <span class="nav-text">Communication</span>
+                </a>
+                <a href="advertisement.html" class="nav-item">
+                    <i class="fas fa-bullhorn nav-icon"></i>
+                    <span class="nav-text">Advertisement</span>
+                </a>
+                <a href="alumni.html" class="nav-item">
+                    <i class="fas fa-graduation-cap nav-icon"></i>
+                    <span class="nav-text">Alumni Portal</span>
+                </a>
+                <a href="scholarship.html" class="nav-item">
+                    <i class="fas fa-shield-alt nav-icon"></i>
+                    <span class="nav-text">Scholarship & Offers</span>
+                </a>
+                <a href="referral.html" class="nav-item">
+                    <i class="fas fa-share-alt nav-icon"></i>
+                    <span class="nav-text">Referral Program</span>
+                </a>
+                <a href="analytics.html" class="nav-item">
+                    <i class="fas fa-chart-bar nav-icon"></i>
+                    <span class="nav-text">Analytics & Reports</span>
+                </a>
+                <a href="notifications.html" class="nav-item">
+                    <i class="fas fa-bell nav-icon"></i>
+                    <span class="nav-text">Notifications</span>
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <i class="fas fa-cog nav-icon"></i>
+                    <span class="nav-text">Settings</span>
+                </a>
+                <a href="cloud.html" class="nav-item">
+                    <i class="fas fa-cloud nav-icon"></i>
+                    <span class="nav-text">Cloud</span>
+                </a>
+                <a href="expenses.html" class="nav-item">
+                    <i class="fas fa-wallet nav-icon"></i>
+                    <span class="nav-text">Expenses</span>
+                </a>
+                <a href="finance.html" class="nav-item">
+                    <i class="fas fa-chart-line nav-icon"></i>
+                    <span class="nav-text">Finance</span>
+                </a>
+            </nav>
+        </div>
 
-        <!-- Dashboard Widgets -->
-        <section class="dashboard">
-            <div class="card">Total Revenue</div>
-            <div class="card">Students</div>
-            <div class="card">Staff</div>
-            <div class="card">Upcoming Events</div>
-        </section>
-    </main>
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Top Header -->
+            <div class="top-header">
+                <div class="header-search">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" placeholder="Search staff members...">
+                </div>
+                
+                <div class="header-right">
+                    <!-- Universal Notification Dropdown -->
+                    <div class="notification-dropdown">
+                        <div class="notification-bell" id="notificationBell">
+                            <i class="fas fa-bell"></i>
+                            <div class="notification-badge" id="notificationBadge">0</div>
+                        </div>
+                        
+                        <div class="notification-panel" id="notificationPanel">
+                            <div class="notification-panel-header">
+                                <div class="notification-panel-title">Notifications</div>
+                                <button class="notification-clear-all" id="clearAllNotifications">Clear All</button>
+                            </div>
+                            
+                            <div class="notification-panel-body" id="notificationPanelBody">
+                                <div class="notification-empty">
+                                    <div class="notification-empty-icon">
+                                        <i class="fas fa-bell-slash"></i>
+                                    </div>
+                                    <div class="notification-empty-text">No notifications yet</div>
+                                </div>
+                            </div>
+                            
+                            <div class="notification-panel-footer">
+                                <a href="notifications.html" class="notification-view-all">View All Notifications</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">Admin User</div>
+                            <div class="user-role">Administrator</div>
+                        </div>
+                        <i class="fas fa-chevron-down user-dropdown"></i>
+                    </div>
+                </div>
+            </div>
 
-    <script src="admin-dashboard.js"></script>
-    <script src="js/staff.js"></script>
-    <script type="module">
-      const themeToggle = document.getElementById('themeToggle');
-const body = document.body;
-const openSidebar = document.getElementById('openSidebar');
-const closeSidebar = document.getElementById('closeSidebar');
-const sidebar = document.getElementById('sidebar');
-const navLinks = document.querySelectorAll('.sidebar-menu a');
+            <!-- Page Title -->
+            <div class="page-title">Staff Management</div>
+            <div class="page-subtitle">Manage staff information, roles, and performance</div>
 
-// Load saved theme
-if (localStorage.getItem('theme') === 'light') {
-    body.classList.add('light-theme');
-    themeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun');
-}
+            <!-- Staff Statistics Cards -->
+            <div class="staff-stats">
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalStaff">0</h3>
+                        <p>Total Staff</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="activeStaff">0</h3>
+                        <p>Active Staff</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-user-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="newStaff">0</h3>
+                        <p>New This Month</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon purple">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="teachingStaff">0</h3>
+                        <p>Teaching Staff</p>
+                    </div>
+                </div>
+            </div>
 
-// Theme toggle
-themeToggle.addEventListener('click', () => {
-    body.classList.toggle('light-theme');
-    const icon = themeToggle.querySelector('i');
+            <!-- Controls Section -->
+            <div class="staff-controls">
+                <div class="controls-header">
+                    <div class="controls-title">Staff Controls</div>
+                    <div class="controls-actions">
+                        <button class="btn btn-primary" onclick="openAddStaffModal()">
+                            <i class="fas fa-plus"></i>
+                            Add New Staff
+                        </button>
+                        <button class="btn btn-success" onclick="openBulkUploadModal()">
+                            <i class="fas fa-upload"></i>
+                            Bulk Upload
+                        </button>
+                        <button class="btn btn-outline" onclick="exportStaffData()">
+                            <i class="fas fa-download"></i>
+                            Export Data
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="search-filters">
+                    <div class="filter-group">
+                        <label class="filter-label">Search</label>
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search by name, ID, or phone...">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">Department</label>
+                        <select class="filter-select" id="departmentFilter">
+                            <option value="">All Departments</option>
+                            <option value="Teaching">Teaching</option>
+                            <option value="Administration">Administration</option>
+                            <option value="Support">Support</option>
+                            <option value="Management">Management</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">Status</label>
+                        <select class="filter-select" id="statusFilter">
+                            <option value="">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                            <option value="on_leave">On Leave</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">View</label>
+                        <select class="filter-select" id="viewFilter">
+                            <option value="table">Table View</option>
+                            <option value="grid">Grid View</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
-    if (body.classList.contains('light-theme')) {
-        icon.classList.replace('fa-moon', 'fa-sun');
-        localStorage.setItem('theme', 'light');
-    } else {
-        icon.classList.replace('fa-sun', 'fa-moon');
-        localStorage.setItem('theme', 'dark');
-    }
-});
+            <!-- Staff Table View -->
+            <div class="content-card" id="tableView">
+                <div class="card-header">
+                    <div class="card-title">Staff List</div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline btn-sm" onclick="refreshStaffList()">
+                            <i class="fas fa-sync-alt"></i>
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="table" id="staffTable">
+                        <thead>
+                            <tr>
+                                <th>Staff ID</th>
+                                <th>Photo</th>
+                                <th>Name</th>
+                                <th>Department</th>
+                                <th>Position</th>
+                                <th>Contact</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="staffTableBody">
+                            <!-- Table data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-// Sidebar open (mobile only)
-if (openSidebar) {
-    openSidebar.addEventListener('click', () => {
-        sidebar.classList.remove('hidden');
-    });
-}
+            <!-- Staff Grid View -->
+            <div class="content-card" id="gridView" style="display: none;">
+                <div class="card-header">
+                    <div class="card-title">Staff Grid</div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline btn-sm" onclick="refreshStaffList()">
+                            <i class="fas fa-sync-alt"></i>
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="staffGrid" class="staff-grid">
+                    <!-- Grid cards will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
 
-// Sidebar close (mobile only)
-if (closeSidebar) {
-    closeSidebar.addEventListener('click', () => {
-        sidebar.classList.add('hidden');
-    });
-}
+    <!-- Add Staff Modal -->
+    <div id="addStaffModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Add New Staff Member</div>
+                <button class="modal-close" onclick="closeAddStaffModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="addStaffForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Full Name *</label>
+                        <input type="text" class="form-control" id="staffName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Phone Number *</label>
+                        <input type="tel" class="form-control" id="staffPhone" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Email *</label>
+                        <input type="email" class="form-control" id="staffEmail" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Department *</label>
+                        <select class="form-control" id="staffDepartment" required>
+                            <option value="">Select Department</option>
+                            <option value="Teaching">Teaching</option>
+                            <option value="Administration">Administration</option>
+                            <option value="Support">Support</option>
+                            <option value="Management">Management</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Position *</label>
+                        <input type="text" class="form-control" id="staffPosition" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Employee ID</label>
+                        <input type="text" class="form-control" id="staffEmployeeId" placeholder="Auto-generated">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Date of Birth</label>
+                        <input type="date" class="form-control" id="staffDOB">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Gender</label>
+                        <select class="form-control" id="staffGender">
+                            <option value="">Select</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Nationality</label>
+                        <input type="text" class="form-control" id="staffNationality">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Present Address</label>
+                        <textarea class="form-control" id="staffPresentAddress" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Permanent Address</label>
+                        <textarea class="form-control" id="staffPermanentAddress" rows="3"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Educational Qualifications</label>
+                        <textarea class="form-control" id="staffEducation" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Work Experience</label>
+                        <textarea class="form-control" id="staffExperience" rows="3" placeholder="Previous work experience..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Joining Date *</label>
+                        <input type="date" class="form-control" id="staffJoiningDate" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Salary (₹)</label>
+                        <input type="number" class="form-control" id="staffSalary" min="0" step="100">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Emergency Contact</label>
+                        <input type="tel" class="form-control" id="staffEmergencyContact">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Photo URL</label>
+                        <input type="url" class="form-control" id="staffPhotoURL" placeholder="https://example.com/photo.jpg">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Additional Notes</label>
+                    <textarea class="form-control" id="staffNotes" rows="3" placeholder="Any additional information..."></textarea>
+                </div>
+                
+                <div class="card-actions" style="justify-content: flex-end; margin-top: 20px;">
+                    <button type="button" class="btn btn-outline" onclick="closeAddStaffModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Staff Member</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-// Hide sidebar on mobile by default
-if (window.innerWidth <= 768) {
-    sidebar.classList.add('hidden');
-}
+    <!-- Bulk Upload Modal -->
+    <div id="bulkUploadModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Bulk Upload Staff</div>
+                <button class="modal-close" onclick="closeBulkUploadModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="upload-instructions">
+                <h3>Instructions:</h3>
+                <ol>
+                    <li>Download the template file below</li>
+                    <li>Fill in the staff information</li>
+                    <li>Save as CSV format</li>
+                    <li>Upload the file here</li>
+                </ol>
+            </div>
+            
+            <div class="template-download">
+                <button class="btn btn-outline" onclick="downloadTemplate()">
+                    <i class="fas fa-download"></i>
+                    Download Template
+                </button>
+            </div>
+            
+            <div class="upload-section">
+                <div class="file-upload" onclick="document.getElementById('csvFile').click()">
+                    <input type="file" id="csvFile" accept=".csv" onchange="handleFileUpload(event)">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <div class="upload-text">Click to upload CSV file</div>
+                    <div class="upload-hint">or drag and drop here</div>
+                </div>
+            </div>
+            
+            <div id="csvPreview" class="csv-preview" style="display: none;">
+                <h3>Preview:</h3>
+                <div id="previewTable" class="preview-table-container">
+                    <!-- Preview table will be shown here -->
+                </div>
+                <div class="preview-actions">
+                    <button class="btn btn-success" onclick="processBulkUpload()">Process Upload</button>
+                    <button class="btn btn-outline" onclick="clearPreview()">Clear</button>
+                </div>
+            </div>
+            
+            <div class="card-actions" style="justify-content: flex-end; margin-top: 20px;">
+                <button type="button" class="btn btn-outline" onclick="closeBulkUploadModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
 
-// Active link highlight & close sidebar on mobile
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        navLinks.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
+    <!-- Staff Details Modal -->
+    <div id="staffDetailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Staff Details</div>
+                <button class="modal-close" onclick="closeStaffDetailsModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div id="staffDetailsContent">
+                <!-- Staff details will be populated here -->
+            </div>
+            
+            <div class="card-actions" style="justify-content: center; margin-top: 20px;">
+                <button class="btn btn-primary" onclick="editStaff()">
+                    <i class="fas fa-edit"></i>
+                    Edit Staff
+                </button>
+                <button class="btn btn-outline" onclick="closeStaffDetailsModal()">Close</button>
+            </div>
+        </div>
+    </div>
 
-        if (window.innerWidth <= 768) {
-            sidebar.classList.add('hidden');
-        }
-    });
-});
+    <!-- Toast notification container -->
+    <div id="toast-container" style="position:fixed;top:24px;right:24px;z-index:9999;"></div>
+    <!-- Notification Container -->
+    <div id="notificationContainer"></div>
 
-// Auto highlight based on current page URL
-const currentPage = window.location.pathname.split("/").pop();
-navLinks.forEach(link => {
-    if (link.getAttribute("href") === currentPage) {
-        navLinks.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-    }
-});
-    </script>
+    <script src="firebase.js"></script>
+    <script type="module" src="js/toast.js"></script>
+    <script type="module" src="notification-manager.js"></script>
+    <script type="module" src="js/staff.js"></script>
 </body>
 </html>

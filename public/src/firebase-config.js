@@ -1,11 +1,12 @@
-// Replace with your Firebase project config and keep this file committed WITHOUT secrets
+// Replace with your Firebase project config
 export const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID",
+  apiKey: "AIzaSyD5pgNOjCXdkopJW_mtqTpnaa-8MyUZzHc",
+  authDomain: "microtech-88235.firebaseapp.com",
+  projectId: "microtech-88235",
+  storageBucket: "microtech-88235.appspot.com",
+  messagingSenderId: "177325108755",
+  appId: "1:177325108755:web:37d5a44e9a721a501359e6",
+  measurementId: "G-0NXTJF6L49"
 };
 
 export const appSettings = {

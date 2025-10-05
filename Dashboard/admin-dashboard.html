@@ -3,171 +3,266 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
-    <link rel="apple-touch-icon" href="../micro-tech-center.jpg.png">
+    <title>MicroTech Center - Admin Dashboard</title>
     <link rel="stylesheet" href="admin-dashboard.css">
+    <link rel="stylesheet" href="css/notifications.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="dark-theme">
-
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
+<body>
+    <div class="dashboard-container">
+        <!-- Left Sidebar -->
+        <div class="left-sidebar">
         <div class="sidebar-header">
-            <h2>MicroTech</h2>
-            <button class="close-btn" id="closeSidebar"><i class="fas fa-times"></i></button>
+                <div class="sidebar-logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-building"></i>
         </div>
-        <nav class="sidebar-menu">
-            <a href="admin-dashboard.html" class="active"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a>
-            <a href="student.html"><i class="fas fa-users"></i> <span>Students</span></a>
-            <a href="staff.html"><i class="fas fa-user-tie"></i> <span>Staff</span></a>
-            <a href="finance.html"><i class="fas fa-money-bill-wave"></i> <span>Finance</span></a>
-            <a href="fees.html"><i class="fas fa-money-bill-wave"></i> <span>Fees</span></a>
-            <a href="marketing.html"><i class="fas fa-bullhorn"></i> <span>Marketing</span></a>
-            <a href="settings.html"><i class="fas fa-cogs"></i> <span>Settings</span></a>
-        </nav>
-    </aside>
+                    <div class="logo-text">MicroTech Center</div>
+                </div>
+                <div class="sidebar-subtitle">Admin Dashboard</div>
+            </div>
+            
+            <div class="sidebar-search">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" placeholder="Search students, courses, staff...">
+      </div>
+    </div>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Top Navbar -->
-        <header class="topbar">
-            <!-- Remove the menu button for desktop, show only on mobile -->
-            <button class="menu-btn" id="openSidebar"><i class="fas fa-bars"></i></button>
-            <div class="topbar-actions">
-                <button id="themeToggle" title="Toggle Theme"><i class="fas fa-moon"></i></button>
-                <button title="Notifications"><i class="fas fa-bell"></i></button>
-                <div class="profile">
-                    <img src="../micro-tech-center.jpg.png" alt="Profile">
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-home nav-icon"></i>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="revenue.html" class="nav-item">
+                    <i class="fas fa-dollar-sign nav-icon"></i>
+                    <span class="nav-text">Revenue Management</span>
+                </a>
+                <a href="student.html" class="nav-item">
+                    <i class="fas fa-users nav-icon"></i>
+                    <span class="nav-text">Students</span>
+                </a>
+                <a href="staff.html" class="nav-item">
+                    <i class="fas fa-user-tie nav-icon"></i>
+                    <span class="nav-text">Staff</span>
+                </a>
+                <a href="counselors.html" class="nav-item">
+                    <i class="fas fa-phone nav-icon"></i>
+                    <span class="nav-text">Counselors</span>
+                </a>
+                <a href="courses.html" class="nav-item">
+                    <i class="fas fa-book-open nav-icon"></i>
+                    <span class="nav-text">Courses & Academics</span>
+                </a>
+                <a href="fees.html" class="nav-item">
+                    <i class="fas fa-credit-card nav-icon"></i>
+                    <span class="nav-text">Fee Management</span>
+                </a>
+                <a href="communication.html" class="nav-item">
+                    <i class="fas fa-comments nav-icon"></i>
+                    <span class="nav-text">Communication</span>
+                </a>
+                <a href="advertisement.html" class="nav-item">
+                    <i class="fas fa-bullhorn nav-icon"></i>
+                    <span class="nav-text">Advertisement</span>
+                </a>
+                <a href="alumni.html" class="nav-item">
+                    <i class="fas fa-graduation-cap nav-icon"></i>
+                    <span class="nav-text">Alumni Portal</span>
+                </a>
+                <a href="scholarship.html" class="nav-item">
+                    <i class="fas fa-shield-alt nav-icon"></i>
+                    <span class="nav-text">Scholarship & Offers</span>
+                </a>
+                <a href="referral.html" class="nav-item">
+                    <i class="fas fa-share-alt nav-icon"></i>
+                    <span class="nav-text">Referral Program</span>
+                </a>
+                <a href="analytics.html" class="nav-item">
+                    <i class="fas fa-chart-bar nav-icon"></i>
+                    <span class="nav-text">Analytics & Reports</span>
+                </a>
+                <a href="notifications.html" class="nav-item">
+                    <i class="fas fa-bell nav-icon"></i>
+                    <span class="nav-text">Notifications</span>
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <i class="fas fa-cog nav-icon"></i>
+                    <span class="nav-text">Settings</span>
+                </a>
+                <a href="cloud.html" class="nav-item">
+                    <i class="fas fa-cloud nav-icon"></i>
+                    <span class="nav-text">Cloud</span>
+                </a>
+                <a href="expenses.html" class="nav-item">
+                    <i class="fas fa-wallet nav-icon"></i>
+                    <span class="nav-text">Expenses</span>
+                </a>
+                <a href="finance.html" class="nav-item">
+                    <i class="fas fa-chart-line nav-icon"></i>
+                    <span class="nav-text">Finance</span>
+                </a>
+            </nav>
+      </div>
+      
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Header -->
+            <div class="top-header">
+                <div class="header-search">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" placeholder="Search students, courses, staff...">
+    </div>
+
+                <div class="header-right">
+                    <!-- Universal Notification Dropdown -->
+                    <div class="notification-dropdown">
+                        <div class="notification-bell" id="notificationBell">
+                            <i class="fas fa-bell"></i>
+                            <div class="notification-badge" id="notificationBadge">0</div>
+                        </div>
+                        
+                        <div class="notification-panel" id="notificationPanel">
+                            <div class="notification-panel-header">
+                                <div class="notification-panel-title">Notifications</div>
+                                <button class="notification-clear-all" id="clearAllNotifications">Clear All</button>
+                            </div>
+                            
+                            <div class="notification-panel-body" id="notificationPanelBody">
+                                <div class="notification-empty">
+                                    <div class="notification-empty-icon">
+                                        <i class="fas fa-bell-slash"></i>
+                                    </div>
+                                    <div class="notification-empty-text">No notifications yet</div>
+                                </div>
+                            </div>
+                            
+                            <div class="notification-panel-footer">
+                                <a href="notifications.html" class="notification-view-all">View All Notifications</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">Admin User</div>
+                            <div class="user-role">Super Admin</div>
+                        </div>
+                        <i class="fas fa-chevron-down user-dropdown"></i>
+                    </div>
+                </div>
+  </div>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-title">Dashboard Overview</div>
+            <div class="dashboard-subtitle">Welcome back! Here's what's happening at MicroTech Center today.</div>
+
+            <!-- Key Metrics -->
+            <div class="metrics-grid">
+                <div class="metric-card hover-lift">
+                    <div class="metric-header">
+                        <div class="metric-title">Total Revenue</div>
+                        <div class="metric-icon blue">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value">₹2,45,680</div>
+                    <div class="metric-change">+12.5% from last month</div>
+    </div>
+
+                <div class="metric-card hover-lift">
+                    <div class="metric-header">
+                        <div class="metric-title">Education Revenue</div>
+                        <div class="metric-icon green">
+                            <i class="fas fa-graduation-cap"></i>
+    </div>
+  </div>
+                    <div class="metric-value">₹1,85,240</div>
+                    <div class="metric-change">+8.3% from last month</div>
+                    <div class="metric-breakdown">CAPT: ₹95k • LBS: ₹55k • Gama: ₹35k</div>
+                </div>
+
+                <div class="metric-card hover-lift">
+                    <div class="metric-header">
+                        <div class="metric-title">Business Revenue</div>
+                        <div class="metric-icon orange">
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value">₹60,440</div>
+                    <div class="metric-change">+18.7% from last month</div>
+                    <div class="metric-breakdown">Micro Computers: ₹45k • Other: ₹15k</div>
+                </div>
+
+                <div class="metric-card hover-lift">
+                    <div class="metric-header">
+                        <div class="metric-title">Monthly Growth</div>
+                        <div class="metric-icon purple">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value">₹12,580</div>
+                    <div class="metric-change">+4.2% from last month</div>
                 </div>
             </div>
-        </header>
 
-  
-   <!-- Dashboard Widgets -->
-  <section class="stats-overview">
-  <h2>Stats Overview</h2>
-
-  <!-- Counters -->
-  <div class="stats-grid">
-    <div class="stat-card">
-      <i class="fa-solid fa-user-graduate"></i>
-      <div>
-        <h3 id="totalStudents">0</h3>
-        <p>Total Students</p>
-      </div>
+            <!-- Quick Statistics -->
+            <div class="stats-section">
+                <div class="stats-title">Quick Statistics</div>
+                <div class="stats-grid">
+                    <div class="stat-card hover-lift">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-label">Total Students</div>
+                    </div>
+                    
+                    <div class="stat-card hover-lift">
+                        <div class="stat-icon green">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-label">Active Courses</div>
+                    </div>
+                    
+                    <div class="stat-card hover-lift">
+                        <div class="stat-icon orange">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-label">Pending Fees</div>
+                    </div>
+                    
+                    <div class="stat-card hover-lift">
+                        <div class="stat-icon purple">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="stat-label">New Admissions</div>
+                    </div>
+                    
+                    <div class="stat-card hover-lift">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="stat-label">Total Courses</div>
+                    </div>
+                    
+                    <div class="stat-card hover-lift">
+                        <div class="stat-icon green">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="stat-label">Staff Members</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="stat-card">
-      <i class="fa-solid fa-user-tie"></i>
-      <div>
-        <h3 id="totalStaff">0</h3>
-        <p>Total Staff</p>
-      </div>
-    </div>
-
-    <div class="stat-card">
-      <i class="fa-solid fa-book-open"></i>
-      <div>
-        <h3 id="totalCourses">0</h3>
-        <p>Total Courses</p>
-      </div>
-    </div>
-
-    <div class="stat-card">
-      <i class="fa-solid fa-sack-dollar"></i>
-      <div>
-        <h3 id="totalRevenue">₹0</h3>
-        <p>Total Revenue</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Charts -->
-  <div class="charts-grid">
-    <div class="chart-card">
-      <h3>Student Distribution by Division</h3>
-      <canvas id="studentDivisionChart"></canvas>
-    </div>
-
-    <div class="chart-card">
-      <h3>Monthly Revenue</h3>
-      <canvas id="monthlyRevenueChart"></canvas>
-    </div>
-  </div>
-</section>
-
-    </main>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script type="module" src="firebase.js"></script>
+    <!-- Toast notification container -->
+    <div id="toast-container" style="position:fixed;top:24px;right:24px;z-index:9999;"></div>
+    <script type="module" src="js/toast.js"></script>
+    <script type="module" src="notification-manager.js"></script>
     <script type="module" src="admin-dashboard.js"></script>
-    <script type="module">
-      const themeToggle = document.getElementById('themeToggle');
-const body = document.body;
-const openSidebar = document.getElementById('openSidebar');
-const closeSidebar = document.getElementById('closeSidebar');
-const sidebar = document.getElementById('sidebar');
-const navLinks = document.querySelectorAll('.sidebar-menu a');
-
-// Load saved theme
-if (localStorage.getItem('theme') === 'light') {
-    body.classList.add('light-theme');
-    themeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun');
-}
-
-// Theme toggle
-themeToggle.addEventListener('click', () => {
-    body.classList.toggle('light-theme');
-    const icon = themeToggle.querySelector('i');
-
-    if (body.classList.contains('light-theme')) {
-        icon.classList.replace('fa-moon', 'fa-sun');
-        localStorage.setItem('theme', 'light');
-    } else {
-        icon.classList.replace('fa-sun', 'fa-moon');
-        localStorage.setItem('theme', 'dark');
-    }
-});
-
-// Sidebar open (mobile only)
-if (openSidebar) {
-    openSidebar.addEventListener('click', () => {
-        sidebar.classList.remove('hidden');
-    });
-}
-
-// Sidebar close (mobile only)
-if (closeSidebar) {
-    closeSidebar.addEventListener('click', () => {
-        sidebar.classList.add('hidden');
-    });
-}
-
-// Hide sidebar on mobile by default
-if (window.innerWidth <= 768) {
-    sidebar.classList.add('hidden');
-}
-
-// Active link highlight & close sidebar on mobile
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        navLinks.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-
-        if (window.innerWidth <= 768) {
-            sidebar.classList.add('hidden');
-        }
-    });
-});
-
-// Auto highlight based on current page URL
-const currentPage = window.location.pathname.split("/").pop();
-navLinks.forEach(link => {
-    if (link.getAttribute("href") === currentPage) {
-        navLinks.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-    }
-});
-    </script>
 </body>
 </html>

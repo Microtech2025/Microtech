@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Bulk Upload Function</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+        .test-results {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        .success {
+            color: #28a745;
+        }
+        .error {
+            color: #dc3545;
+        }
+        .warning {
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bulk Upload Function Test</h1>
+        
+        <p>This page tests the corrected bulk upload functionality for the student management system.</p>
+        
+        <button class="button" onclick="testDownloadTemplate()">Test Download Template</button>
+        <button class="button" onclick="testValidationFunction()">Test Validation Function</button>
+        
+        <div id="test-results" class="test-results" style="display: none;">
+            <h3>Test Results:</h3>
+            <div id="results-content"></div>
+        </div>
+    </div>
+
+    <script>
+        // Mock the validation function from student.js
+        function validateBulkStudentData(rawData) {
+            const validStudents = [];
+            const validationErrors = [];
+            
+            // Email validation regex
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            // Phone validation regex (allows digits, spaces, hyphens, parentheses, plus)
+            const phoneRegex = /^[\d\s\-\+\(\)]+$/;
+            
+            for (let index = 0; index < rawData.length; index++) {
+                const row = rawData[index];
+                const rowNumber = index + 2; // +2 because index starts at 0 and we skip header row
+                const errors = [];
+                
+                // Map common column names to our field names (ensuring consistent field names)
+                const student = {
+                    name: row['Student Name'] || row['Name'] || row['name'] || '',
+                    email: row['Email'] || row['email'] || '',
+                    phone: row['Phone'] || row['Phone Number'] || row['phone'] || row['mobile'] || '',
+                    gender: row['Gender'] || row['gender'] || 'Male',
+                    dob: row['Date of Birth'] || row['DOB'] || row['dob'] || '',
+                    age: row['Age'] || row['age'] || '',
+                    address: row['Address'] || row['address'] || '',
+                    district: row['District'] || row['district'] || '',
+                    state: row['State'] || row['state'] || '',
+                    country: row['Country'] || row['country'] || 'India',
+                    zip: row['ZIP Code'] || row['Zip'] || row['zip'] || '',
+                    division: row['Division'] || row['division'] || '',
+                    course: row['Course'] || row['course'] || '',
+                    status: row['Status'] || row['status'] || 'active',
+                    admissionDate: row['Admission Date'] || row['admissionDate'] || '',
+                    admissionFee: row['Admission Fee'] || row['admissionFee'] || '',
+                    batchTime: row['Batch Time'] || row['batchTime'] || '',
+                    feeStatus: row['Fee Status'] || row['feeStatus'] || 'Pending',
+                    guardianName: row['Guardian Name'] || row['guardianName'] || '',
+                    guardianOccupation: row['Guardian Occupation'] || row['guardianOccupation'] || ''
+                };
+                
+                // Required field validation
+                if (!student.name || student.name.trim() === '') {
+                    errors.push('Student name is required');
+                }
+                
+                if (!student.email || student.email.trim() === '') {
+                    errors.push('Email is required');
+                } else if (!emailRegex.test(student.email.trim())) {
+                    errors.push('Invalid email format');
+                }
+                
+                if (!student.phone || student.phone.trim() === '') {
+                    errors.push('Phone number is required');
+                } else if (!phoneRegex.test(student.phone.trim())) {
+                    errors.push('Invalid phone number format');
+                }
+                
+                if (!student.division || student.division.trim() === '') {
+                    errors.push('Division is required');
+                } else {
+                    // Validate division values
+                    const validDivisions = ['CAPT', 'LBS', 'Gama Abacus'];
+                    if (!validDivisions.includes(student.division)) {
+                        errors.push('Division must be one of: CAPT, LBS, Gama Abacus');
+                    }
+                }
+                
+                if (!student.guardianName || student.guardianName.trim() === '') {
+                    errors.push('Guardian name is required');
+                }
+                
+                // Data type conversion and validation
+                if (student.age && student.age !== '') {
+                    const ageNum = parseInt(student.age, 10);
+                    if (isNaN(ageNum) || ageNum < 5 || ageNum > 100) {
+                        errors.push('Age must be a valid number between 5 and 100');
+                    } else {
+                        student.age = ageNum;
+                    }
+                }
+                
+                if (student.admissionFee && student.admissionFee !== '') {
+                    const feeNum = parseFloat(student.admissionFee);
+                    if (isNaN(feeNum) || feeNum < 0) {
+                        errors.push('Admission fee must be a valid positive number');
+                    } else {
+                        student.admissionFee = feeNum;
+                    }
+                } else {
+                    student.admissionFee = 1000; // Default fee
+                }
+                
+                // Division-specific validation and defaults
+                if (student.division === 'Gama Abacus') {
+                    student.course = 'Gama Abacus';
+                    student.feeStatus = 'Paid';
+                } else if (student.division === 'CAPT' || student.division === 'LBS') {
+                    if (!student.course || student.course.trim() === '') {
+                        student.course = 'General'; // Default course
+                    }
+                    if (!student.feeStatus || student.feeStatus.trim() === '') {
+                        student.feeStatus = 'Pending'; // Default fee status
+                    }
+                }
+                
+                // Set default values for all required fields
+                student.photoURL = student.photoURL || 'https://i.pinimg.com/736x/38/41/97/384197530d32338dd6caafaf1c6a26c4.jpg';
+                student.role = 'student';
+                student.status = student.status || 'active';
+                student.batchTime = student.batchTime || '09:00';
+                student.address = student.address || 'Address not provided';
+                student.district = student.district || 'District not provided';
+                student.state = student.state || 'State not provided';
+                student.zip = student.zip || '000000';
+                student.age = student.age || 18;
+                
+                // Clean up string fields
+                Object.keys(student).forEach(key => {
+                    if (typeof student[key] === 'string') {
+                        student[key] = student[key].trim();
+                    }
+                });
+                
+                // If no validation errors, add to valid students
+                if (errors.length === 0) {
+                    validStudents.push(student);
+                } else {
+                    validationErrors.push({
+                        row: rowNumber,
+                        name: student.name || 'Unknown',
+                        errors: errors
+                    });
+                }
+            }
+            
+            return { validStudents, validationErrors };
+        }
+
+        function testDownloadTemplate() {
+            try {
+                // Create sample data
+                const sampleData = [
+                    {
+                        'Student Name': 'John Doe',
+                        'Email': 'john.doe@email.com',
+                        'Phone': '+1234567890',
+                        'Gender': 'Male',
+                        'Date of Birth': '2000-01-15',
+                        'Age': '24',
+                        'Address': '123 Main Street, Apartment 5B',
+                        'District': 'Central District',
+                        'State': 'California',
+                        'Country': 'USA',
+                        'ZIP Code': '12345',
+                        'Division': 'CAPT',
+                        'Course': 'Basic Computer Course',
+                        'Status': 'active',
+                        'Admission Date': '2024-01-15',
+                        'Admission Fee': '5000',
+                        'Batch Time': '10:00 AM - 12:00 PM',
+                        'Fee Status': 'Paid',
+                        'Guardian Name': 'Jane Doe',
+                        'Guardian Occupation': 'Software Engineer'
+                    }
+                ];
+                
+                // Create workbook and worksheet
+                const workbook = XLSX.utils.book_new();
+                const worksheet = XLSX.utils.json_to_sheet(sampleData);
+                
+                // Add worksheet to workbook
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Test Students');
+                
+                // Download the template
+                const fileName = `test_student_template_${new Date().toISOString().split('T')[0]}.xlsx`;
+                XLSX.writeFile(workbook, fileName);
+                
+                showTestResult('Template download test passed!', 'success');
+                
+            } catch (error) {
+                showTestResult('Template download test failed: ' + error.message, 'error');
+            }
+        }
+
+        function testValidationFunction() {
+            const testData = [
+                // Valid record
+                {
+                    'Student Name': 'Test Student 1',
+                    'Email': 'test1@email.com',
+                    'Phone': '+1234567890',
+                    'Division': 'CAPT',
+                    'Guardian Name': 'Test Guardian 1'
+                },
+                // Invalid record - missing email
+                {
+                    'Student Name': 'Test Student 2',
+                    'Email': '',
+                    'Phone': '+1234567891',
+                    'Division': 'LBS',
+                    'Guardian Name': 'Test Guardian 2'
+                },
+                // Invalid record - bad division
+                {
+                    'Student Name': 'Test Student 3',
+                    'Email': 'test3@email.com',
+                    'Phone': '+1234567892',
+                    'Division': 'INVALID',
+                    'Guardian Name': 'Test Guardian 3'
+                },
+                // Valid Gama Abacus record
+                {
+                    'Student Name': 'Test Student 4',
+                    'Email': 'test4@email.com',
+                    'Phone': '+1234567893',
+                    'Division': 'Gama Abacus',
+                    'Guardian Name': 'Test Guardian 4'
+                }
+            ];
+
+            const result = validateBulkStudentData(testData);
+            
+            let resultHTML = '<h4>Validation Test Results:</h4>';
+            resultHTML += `<p class="success">✅ Valid records: ${result.validStudents.length}</p>`;
+            resultHTML += `<p class="error">❌ Invalid records: ${result.validationErrors.length}</p>`;
+            
+            if (result.validationErrors.length > 0) {
+                resultHTML += '<h5>Validation Errors:</h5><ul>';
+                result.validationErrors.forEach(error => {
+                    resultHTML += `<li class="error">Row ${error.row} (${error.name}): ${error.errors.join(', ')}</li>`;
+                });
+                resultHTML += '</ul>';
+            }
+            
+            if (result.validStudents.length > 0) {
+                resultHTML += '<h5>Valid Students:</h5><ul>';
+                result.validStudents.forEach(student => {
+                    resultHTML += `<li class="success">${student.name} - ${student.division} - ${student.email}</li>`;
+                });
+                resultHTML += '</ul>';
+            }
+            
+            const expectedValid = 2;
+            const expectedInvalid = 2;
+            
+            if (result.validStudents.length === expectedValid && result.validationErrors.length === expectedInvalid) {
+                resultHTML += '<p class="success"><strong>✅ Validation test PASSED!</strong></p>';
+            } else {
+                resultHTML += '<p class="error"><strong>❌ Validation test FAILED!</strong></p>';
+            }
+            
+            showTestResult(resultHTML, 'info');
+        }
+
+        function showTestResult(message, type) {
+            const resultsDiv = document.getElementById('test-results');
+            const contentDiv = document.getElementById('results-content');
+            
+            resultsDiv.style.display = 'block';
+            
+            const timestamp = new Date().toLocaleTimeString();
+            const resultItem = document.createElement('div');
+            resultItem.className = type;
+            resultItem.innerHTML = `<strong>[${timestamp}]</strong> ${message}`;
+            
+            contentDiv.appendChild(resultItem);
+        }
+    </script>
+</body>
+</html>

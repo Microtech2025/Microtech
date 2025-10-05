@@ -1,5 +1,24 @@
 import { db } from '../firebase.js';
 import { collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { initializeUserProfile, addProfileStyles } from './profile-utils.js';
+import { showToast } from './toast.js';
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Finance page loaded');
+    
+    // Initialize profile functionality
+    addProfileStyles();
+    initializeUserProfile();
+    
+    // Initialize finance-specific functionality
+    initializeFinance();
+});
+
+function initializeFinance() {
+    console.log('Initializing finance management...');
+    showToast('Finance page loaded successfully', 'success');
+}
 
 // Existing loadStats() stays as is
 

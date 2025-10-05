@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <h1>Export Functionality Test</h1>
+    <button onclick="testPDF()">Test PDF Export</button>
+    <button onclick="testExcel()">Test Excel Export</button>
+    
+    <script>
+        // Sample student data for testing
+        const sampleStudents = [
+            {
+                name: 'John Doe',
+                division: 'CAPT',
+                course: 'Basic Computer',
+                guardianName: 'Jane Doe',
+                email: 'john@email.com',
+                phone: '+1234567890',
+                admissionDate: '2024-01-15',
+                feeStatus: 'Paid',
+                status: 'active'
+            },
+            {
+                name: 'Sarah Smith',
+                division: 'LBS',
+                course: 'Advanced Math',
+                guardianName: 'Robert Smith',
+                email: 'sarah@email.com',
+                phone: '+1234567891',
+                admissionDate: '2024-01-20',
+                feeStatus: 'Pending',
+                status: 'active'
+            }
+        ];
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            try {
+                return new Date(dateString).toLocaleDateString();
+            } catch (error) {
+                return dateString;
+            }
+        }
+
+        function testPDF() {
+            try {
+                console.log('Testing PDF export...');
+                
+                // Create new jsPDF instance
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('landscape');
+                
+                // Set document title
+                doc.setFontSize(18);
+                doc.text('MicroTech Center - Student Report (TEST)', 20, 20);
+                
+                // Add generation date
+                doc.setFontSize(10);
+                doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 20, 30);
+                doc.text(`Total Students: ${sampleStudents.length}`, 20, 36);
+                
+                // Prepare table data
+                const columns = [
+                    'Name', 
+                    'Division', 
+                    'Course', 
+                    'Guardian', 
+                    'Email', 
+                    'Phone', 
+                    'Admission Date', 
+                    'Fee Status', 
+                    'Status'
+                ];
+                
+                const rows = sampleStudents.map(student => [
+                    student.name || 'N/A',
+                    student.division || 'N/A',
+                    student.course || 'N/A',
+                    student.guardianName || 'N/A',
+                    student.email || 'N/A',
+                    student.phone || 'N/A',
+                    formatDate(student.admissionDate) || 'N/A',
+                    student.feeStatus || 'N/A',
+                    student.status || 'N/A'
+                ]);
+                
+                // Generate table using autoTable plugin
+                doc.autoTable({
+                    head: [columns],
+                    body: rows,
+                    startY: 45,
+                    styles: {
+                        fontSize: 8,
+                        cellPadding: 2
+                    },
+                    headStyles: {
+                        fillColor: [59, 130, 246],
+                        textColor: 255,
+                        fontStyle: 'bold'
+                    },
+                    alternateRowStyles: {
+                        fillColor: [245, 245, 245]
+                    },
+                    margin: { top: 45, left: 10, right: 10 }
+                });
+                
+                // Save the PDF
+                const fileName = `test_students_report_${new Date().toISOString().split('T')[0]}.pdf`;
+                doc.save(fileName);
+                
+                alert('PDF export test completed successfully!');
+                
+            } catch (error) {
+                console.error('PDF export test failed:', error);
+                alert('PDF export test failed: ' + error.message);
+            }
+        }
+
+        function testExcel() {
+            try {
+                console.log('Testing Excel export...');
+                
+                // Prepare workbook data
+                const workbook = XLSX.utils.book_new();
+                
+                // Prepare student data with all fields
+                const studentData = sampleStudents.map(student => ({
+                    'Student Name': student.name || '',
+                    'Email': student.email || '',
+                    'Phone': student.phone || '',
+                    'Division': student.division || '',
+                    'Course': student.course || '',
+                    'Status': student.status || '',
+                    'Admission Date': formatDate(student.admissionDate) || '',
+                    'Fee Status': student.feeStatus || '',
+                    'Guardian Name': student.guardianName || ''
+                }));
+                
+                // Create worksheet from student data
+                const worksheet = XLSX.utils.json_to_sheet(studentData);
+                
+                // Set column widths for better readability
+                const columnWidths = [
+                    { wch: 20 }, // Student Name
+                    { wch: 25 }, // Email
+                    { wch: 15 }, // Phone
+                    { wch: 12 }, // Division
+                    { wch: 20 }, // Course
+                    { wch: 10 }, // Status
+                    { wch: 15 }, // Admission Date
+                    { wch: 12 }, // Fee Status
+                    { wch: 20 }  // Guardian Name
+                ];
+                
+                worksheet['!cols'] = columnWidths;
+                
+                // Add worksheet to workbook
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Test Students');
+                
+                // Generate filename with current date
+                const fileName = `test_students_data_${new Date().toISOString().split('T')[0]}.xlsx`;
+                
+                // Write and download the Excel file
+                XLSX.writeFile(workbook, fileName);
+                
+                alert('Excel export test completed successfully!');
+                
+            } catch (error) {
+                console.error('Excel export test failed:', error);
+                alert('Excel export test failed: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
