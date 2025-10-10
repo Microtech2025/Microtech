@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -11,7 +11,7 @@
 <body>
   <!-- Contact Section -->
 <section class="contact-section" id="contact">
-    <button class="back-btn" onclick="window.location.href='index.html'">
+    <button class="back-btn" onclick="window.location.href='index'">
     ← Back to Home
   </button>
   <div class="contact-container">
@@ -67,7 +67,7 @@
     emailjs.sendForm("service_abc123", "template_s7mz7ms", this)
       .then(() => {
         document.getElementById("loadingOverlay").style.display = "none";
-        window.location.href = "thankyou.html";
+        window.location.href = "thankyou";
       })
       .catch((error) => {
         document.getElementById("loadingOverlay").style.display = "none";

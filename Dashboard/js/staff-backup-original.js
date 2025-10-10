@@ -172,6 +172,7 @@ function handleOnlineStatus() {
         isOnline = true;
         offlineToastShown = false;
         dismissOfflineAlert();
+        notifyConnectionRestored();
         showToast('Internet connection restored!', 'success');
         
         // Retry loading data if needed
@@ -215,6 +216,294 @@ window.retryConnection = retryConnection;
 window.dismissOfflineAlert = dismissOfflineAlert;
 
 // =============================================================================
+// NOTIFICATION MANAGEMENT
+// =============================================================================
+
+// Notification system is now modular - see notification-module.js
+
+
+
+
+
+    setupEventListeners() {
+        // Notification bell click
+        const notificationBell = document.getElementById('notificationBell');
+        if (notificationBell) {
+            notificationBell.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.toggleNotificationPanel();
+            });
+        }
+
+        // Clear all notifications
+        const clearAllBtn = document.getElementById('clearAllNotifications');
+        if (clearAllBtn) {
+            clearAllBtn.addEventListener('click', () => {
+                this.clearAllNotifications();
+            });
+        }
+
+        // Close panel when clicking outside
+        document.addEventListener('click', (e) => {
+            const panel = document.getElementById('notificationPanel');
+            const bell = document.getElementById('notificationBell');
+            
+            if (panel && !panel.contains(e.target) && !bell.contains(e.target)) {
+                this.hideNotificationPanel();
+            }
+        });
+    }
+
+    toggleNotificationPanel() {
+        const panel = document.getElementById('notificationPanel');
+        if (panel) {
+            const isVisible = panel.style.display === 'block';
+            if (isVisible) {
+                this.hideNotificationPanel();
+            } else {
+                this.showNotificationPanel();
+            }
+        }
+    }
+
+    showNotificationPanel() {
+        const panel = document.getElementById('notificationPanel');
+        if (panel) {
+            panel.style.display = 'block';
+            // Mark all as read when panel is opened
+            this.markAllAsRead();
+        }
+    }
+
+    hideNotificationPanel() {
+        const panel = document.getElementById('notificationPanel');
+        if (panel) {
+            panel.style.display = 'none';
+        }
+    }
+
+    addNotification(notification) {
+        const newNotification = {
+            id: Date.now(),
+            title: notification.title || 'Notification',
+            message: notification.message || '',
+            type: notification.type || 'info', // info, success, warning, error
+            timestamp: new Date(),
+            read: false,
+            action: notification.action || null,
+            ...notification
+        };
+
+        this.notifications.unshift(newNotification);
+        this.unreadCount++;
+        
+        // Keep only last 50 notifications
+        if (this.notifications.length > 50) {
+            this.notifications = this.notifications.slice(0, 50);
+        }
+
+        this.updateBadge();
+        this.renderNotifications();
+        this.saveNotifications();
+
+        // Show toast if notification is important
+        if (notification.showToast !== false) {
+            this.showNotificationToast(newNotification);
+        }
+    }
+
+    showNotificationToast(notification) {
+        if (typeof showToast === 'function') {
+            showToast(notification.message, notification.type);
+        }
+    }
+
+    markAllAsRead() {
+        this.notifications.forEach(notification => {
+            notification.read = true;
+        });
+        this.unreadCount = 0;
+        this.updateBadge();
+        this.renderNotifications();
+        this.saveNotifications();
+    }
+
+    clearAllNotifications() {
+        this.notifications = [];
+        this.unreadCount = 0;
+        this.updateBadge();
+        this.renderNotifications();
+        this.saveNotifications();
+    }
+
+    updateBadge() {
+        const badge = document.getElementById('notificationBadge');
+        if (badge) {
+            badge.textContent = this.unreadCount;
+            badge.style.display = this.unreadCount > 0 ? 'block' : 'none';
+        }
+    }
+
+    renderNotifications() {
+        const panelBody = document.getElementById('notificationPanelBody');
+        if (!panelBody) return;
+
+        if (this.notifications.length === 0) {
+            panelBody.innerHTML = `
+                <div class="notification-empty">
+                    <div class="notification-empty-icon">
+                        <i class="fas fa-bell-slash"></i>
+                    </div>
+                    <div class="notification-empty-text">No notifications yet</div>
+                </div>
+            `;
+            return;
+        }
+
+        const notificationsHTML = this.notifications.map(notification => {
+            const timeAgo = this.getTimeAgo(notification.timestamp);
+            const iconClass = this.getNotificationIcon(notification.type);
+            const readClass = notification.read ? 'read' : 'unread';
+
+            return `
+                <div class="notification-item ${readClass}" data-id="${notification.id}">
+                    <div class="notification-icon ${notification.type}">
+                        <i class="${iconClass}"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-title">${notification.title}</div>
+                        <div class="notification-message">${notification.message}</div>
+                        <div class="notification-time">${timeAgo}</div>
+                    </div>
+                    ${notification.action ? `
+                        <div class="notification-action">
+                            <button class="notification-action-btn" onclick="${notification.action}">
+                                ${notification.actionText || 'View'}
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }).join('');
+
+        panelBody.innerHTML = notificationsHTML;
+    }
+
+    getNotificationIcon(type) {
+        const icons = {
+            info: 'fas fa-info-circle',
+            success: 'fas fa-check-circle',
+            warning: 'fas fa-exclamation-triangle',
+            error: 'fas fa-times-circle',
+            staff: 'fas fa-user-tie',
+            system: 'fas fa-cog'
+        };
+        return icons[type] || icons.info;
+    }
+
+    getTimeAgo(timestamp) {
+        const now = new Date();
+        const diffMs = now - timestamp;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMins / 60);
+        const diffDays = Math.floor(diffHours / 24);
+
+        if (diffMins < 1) return 'Just now';
+        if (diffMins < 60) return `${diffMins}m ago`;
+        if (diffHours < 24) return `${diffHours}h ago`;
+        if (diffDays < 7) return `${diffDays}d ago`;
+        return timestamp.toLocaleDateString();
+    }
+
+    loadNotifications() {
+        try {
+            const saved = localStorage.getItem('staff_notifications');
+            if (saved) {
+                const data = JSON.parse(saved);
+                this.notifications = data.map(n => ({
+                    ...n,
+                    timestamp: new Date(n.timestamp)
+                }));
+                this.unreadCount = this.notifications.filter(n => !n.read).length;
+            }
+        } catch (error) {
+            console.error('Error loading notifications:', error);
+        }
+    }
+
+    saveNotifications() {
+        try {
+            localStorage.setItem('staff_notifications', JSON.stringify(this.notifications));
+        } catch (error) {
+            console.error('Error saving notifications:', error);
+        }
+    }
+}
+
+// Initialize notification manager
+// Global notification functions using modular system
+function addNotification(notification) {
+    if (window.notificationManager) {
+        window.notificationManager.addNotification(notification);
+    }
+}
+
+function clearAllNotifications() {
+    if (window.notificationManager) {
+        window.notificationManager.clearAllNotifications();
+    }
+}
+
+// Staff-specific notification functions
+function notifyStaffAdded(staffName) {
+    if (window.notificationManager) {
+        window.notificationManager.notify(NotificationPresets.staff.added(staffName));
+    }
+}
+
+function notifyStaffUpdated(staffName) {
+    if (window.notificationManager) {
+        window.notificationManager.notify(NotificationPresets.staff.updated(staffName));
+    }
+}
+
+function notifyStaffDeleted(staffName) {
+    if (window.notificationManager) {
+        window.notificationManager.notify(NotificationPresets.staff.deleted(staffName));
+    }
+}
+
+function notifyBulkUploadComplete(successCount, errorCount) {
+    if (window.notificationManager) {
+        window.notificationManager.notify(NotificationPresets.staff.bulkUpload(successCount, errorCount));
+    }
+}
+
+function notifySystemError(message) {
+    if (window.notificationManager) {
+        window.notificationManager.error('System Error', message);
+    }
+}
+
+function notifyConnectionRestored() {
+    addNotification({
+        title: 'Connection Restored',
+        message: 'Internet connection has been restored. All features are now available.',
+        type: 'success'
+    });
+}
+
+// Export notification functions to global scope
+window.addNotification = addNotification;
+window.clearAllNotifications = clearAllNotifications;
+window.notifyStaffAdded = notifyStaffAdded;
+window.notifyStaffUpdated = notifyStaffUpdated;
+window.notifyStaffDeleted = notifyStaffDeleted;
+window.notifyBulkUploadComplete = notifyBulkUploadComplete;
+window.notifySystemError = notifySystemError;
+window.notifyConnectionRestored = notifyConnectionRestored;
+
+// =============================================================================
 // INITIALIZATION
 // =============================================================================
 
@@ -247,6 +536,10 @@ async function initializeStaffManagement() {
         // Initialize profile functionality
         addProfileStyles();
         initializeUserProfile();
+        
+        // Initialize notification system
+        // Use the global notification manager from the module
+        // window.notificationManager is automatically initialized
         
         // Initialize all components
         setupEventListeners();
@@ -1597,6 +1890,8 @@ async function handleAddStaff(e) {
         // Reload data
         await loadStaffData();
         
+        // Show notification
+        notifyStaffAdded(staffData.name);
         showToast('Staff member added successfully', 'success');
         
     } catch (error) {
@@ -1742,10 +2037,17 @@ async function confirmDeleteStaff() {
         deleteBtn.disabled = true;
         deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
         
+        // Get staff name before deletion
+        const staff = allStaff.find(s => s.id === staffId);
+        const staffName = staff ? staff.name : 'Staff member';
+        
         await deleteDoc(doc(db, 'staff', staffId));
         
         closeDeleteConfirmModal();
         await loadStaffData();
+        
+        // Show notification
+        notifyStaffDeleted(staffName);
         showToast('Staff member deleted successfully', 'success');
         
     } catch (error) {
@@ -2066,6 +2368,8 @@ async function handleEditStaff(e) {
         closeEditStaffModal();
         await loadStaffData();
         
+        // Show notification
+        notifyStaffUpdated(updatedData.name);
         showToast('Staff member updated successfully', 'success');
         
     } catch (error) {
@@ -3583,6 +3887,9 @@ function showImportResults(successCount, errorCount, errors, sendNotification) {
     
     // Reload staff data
     loadStaffData();
+    
+    // Show notification
+    notifyBulkUploadComplete(successCount, errorCount);
     
     showToast(`Import completed: ${successCount} success, ${errorCount} errors`, 
               errorCount > 0 ? 'warning' : 'success');
