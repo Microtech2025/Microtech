@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -8,6 +8,23 @@
   <title>Micro Tech Center</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .glowing-btn {
+      position: relative;
+      transition: all 0.3s;
+      box-shadow: 0 0 15px rgba(14, 165, 233, 0.4);
+      animation: pulse-glow 2s infinite;
+    }
+    .glowing-btn:hover {
+      box-shadow: 0 0 25px rgba(14, 165, 233, 0.7);
+      transform: translateY(-2px);
+    }
+    @keyframes pulse-glow {
+      0% { box-shadow: 0 0 10px rgba(14, 165, 233, 0.4); }
+      50% { box-shadow: 0 0 20px rgba(14, 165, 233, 0.7); }
+      100% { box-shadow: 0 0 10px rgba(14, 165, 233, 0.4); }
+    }
+  </style>
 </head>
 <body>
   <header class="hero">
@@ -39,7 +56,7 @@
       <h1>Empowering Future Through Technology</h1>
       <p>Learn. Build. Transform. Join MicroTech Computer Center today.</p>
       <div class="hero-buttons">
-        <a href="#courses" class="btn primary">Explore Courses</a>
+        <a href="course" class="btn primary glowing-btn">Explore Courses</a>
         <a href="contact" class="btn secondary">Request PC Service</a>
       </div>
     </div>
@@ -65,7 +82,7 @@
         <p>
           With a commitment to excellence in both education and technology, Micro Tech Center also includes <strong>Micro Computers</strong> — a full-fledged PC dealership, service center, and custom PC builder, offering everything from lab setup to server building.
         </p>
-        <a href="#courses" class="btn-primary">Explore Our Courses</a>
+        <a href="course" class="btn-primary">Explore Our Courses</a>
       </div>
     </div>
   </section>

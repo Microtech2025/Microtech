@@ -1,460 +1,412 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Courses | MicroTech</title>
+  <title>Courses | MicroTech Academy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="../micro-tech-center.jpg.png" type="image/png">
+  <link rel="icon" href="micro-tech-center.jpg.png" type="image/png">
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
+    :root {
+      --primary: #0ea5e9;
+      --primary-dark: #0284c7;
+      --bg-light: #f8fafc;
+      --glass: rgba(255, 255, 255, 0.8);
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+    }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #e5f3f0; /* matches index.html */
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-light);
       margin: 0;
       padding: 0;
-      color: #0a0a0a;
+      color: var(--text-main);
+      overflow-x: hidden;
     }
 
-    .hero-section {
-      background: linear-gradient(120deg, #0ea5e9 60%, #37a59c 100%);
-      padding: 80px 20px 40px;
+    h1, h2, h3, .font-outfit {
+      font-family: 'Outfit', sans-serif;
+    }
+
+    /* Hero Styling */
+    .hero {
+      position: relative;
+      background: #0f172a;
+      padding: 120px 20px 80px;
       text-align: center;
       color: #fff;
+      overflow: hidden;
     }
 
-    .hero-section h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-      color: #fff;
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle at 20% 30%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 70%, rgba(55, 165, 156, 0.15) 0%, transparent 50%);
     }
 
-    .hero-section p {
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      margin: 0 0 16px;
+      letter-spacing: -2px;
+      background: linear-gradient(to right, #fff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
       font-size: 1.1rem;
-      color: #e0f2fe;
+      color: #94a3b8;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
     }
 
-    .search-filter-container {
+    /* Search & Filters */
+    .controls {
+      max-width: 1200px;
+      margin: -40px auto 40px;
+      padding: 24px;
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.4);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.05);
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      padding: 20px;
-      background: #f0fdfc;
-      border-bottom: 1px solid #dbeafe;
+      gap: 16px;
+      z-index: 10;
+      position: relative;
     }
 
-    .search-filter-container input,
-    .search-filter-container select {
-      padding: 10px;
-      font-size: 1rem;
-      border-radius: 6px;
-      border: 1px solid #b6e0e0;
-      background: #f8f9fc;
-      color: #0a0a0a;
+    .search-box {
+      flex: 1;
+      min-width: 280px;
+      position: relative;
     }
 
-    .courses-grid {
+    .search-box i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+
+    .search-box input {
+      width: 100%;
+      height: 52px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding-left: 48px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .search-box input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+    }
+
+    /* Course Grid */
+    .grid {
+      max-width: 1200px;
+      margin: 0 auto 80px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
-      padding: 20px;
-      background: #e5f3f0;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 32px;
+      padding: 0 20px;
     }
 
     .course-card {
       background: #fff;
-      border-radius: 12px;
+      border-radius: 24px;
       overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0, 80, 120, 0.07);
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      border: 1px solid #dbeafe;
+      border: 1px solid #e2e8f0;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      text-decoration: none;
+      color: inherit;
     }
 
     .course-card:hover {
-      transform: translateY(-5px) scale(1.03);
-      box-shadow: 0 8px 24px rgba(14, 165, 233, 0.13);
+      transform: translateY(-8px);
+      box-shadow: 0 30px 60px rgba(15, 23, 42, 0.1);
+      border-color: var(--primary);
     }
 
-    .course-card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      background: #e0f2fe;
-    }
-
-    .course-card-content {
-      padding: 16px;
-    }
-
-    .course-title {
-      font-weight: bold;
-      font-size: 1.1rem;
-      color: #0ea5e9;
-      margin-bottom: 6px;
-    }
-
-    .course-short {
-      font-size: 0.95rem;
-      color: #334155;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0; top: 0;
-      width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.5);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal.show {
-      display: flex;
-    }
-
-    .modal-content {
-      background: #fff;
-      max-width: 480px;
-      padding: 24px;
-      border-radius: 12px;
+    .thumb-wrap {
+      height: 220px;
+      background: #f1f5f9;
       position: relative;
-      max-height: 85vh;
-      overflow-y: auto;
-      box-shadow: 0 8px 32px rgba(14, 165, 233, 0.10);
+      overflow: hidden;
     }
 
-    .modal-content img {
+    .thumb-wrap img {
       width: 100%;
-      border-radius: 8px;
-      margin-bottom: 16px;
-      background: #e0f2fe;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
     }
 
-    .close-btn {
+    .course-card:hover .thumb-wrap img {
+      transform: scale(1.05);
+    }
+
+    .badge-float {
       position: absolute;
-      top: 10px;
-      right: 18px;
-      font-size: 1.4rem;
-      cursor: pointer;
-      color: #0ea5e9;
-      background: none;
-      border: none;
+      top: 16px;
+      right: 16px;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(8px);
+      padding: 6px 12px;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--primary);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
-    .modal-content ul {
-      list-style: none;
-      padding: 0;
-      font-size: 0.98rem;
-      color: #334155;
+    .card-body {
+      padding: 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
 
-    .modal-content li {
-      margin-bottom: 8px;
+    .card-providers {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
     }
 
-    .back-btn-animated {
-      width: 50px;
-      height: 50px;
+    .provider-tag {
+      font-size: 0.65rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: #f1f5f9;
+      color: #475569;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .card-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin: 0 0 12px;
+      line-height: 1.3;
+      color: var(--text-main);
+    }
+
+    .card-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-top: 16px;
+      margin-top: auto;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .meta-item i {
+      color: var(--primary);
+      width: 16px;
+    }
+
+    /* Back Button */
+    .back-btn {
+      position: absolute;
+      top: 32px;
+      left: 32px;
+      width: 48px;
+      height: 48px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
       border-radius: 50%;
-      background: linear-gradient(135deg, #4ed1d5 60%, #0ea5e9 100%);
-      border: none;
-      font-weight: 600;
+      color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0px 0px 0px 4px rgba(180, 160, 255, 0.18);
       cursor: pointer;
       transition: all 0.3s;
-      overflow: hidden;
-      position: relative;
-      margin: 1.5rem 0 0 1.5rem;
+      z-index: 100;
     }
 
-    .back-btn-animated .svgIcon {
-      width: 18px;
-      height: 18px;
-      transition: transform 0.3s;
+    .back-btn:hover {
+      background: #fff;
+      color: #0f172a;
+      transform: scale(1.1);
     }
 
-    .back-btn-animated .svgIcon path {
-      fill: #fff;
+    /* Skeleton Loading */
+    .skeleton {
+      background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+      border-radius: 12px;
     }
 
-    .back-btn-animated::before {
-      position: absolute;
-      left: 60px;
-      content: "Back to Home";
-      color: #fff;
-      font-size: 0px;
-      opacity: 0;
-      transition: font-size 0.3s, opacity 0.3s;
-      font-weight: 500;
-      letter-spacing: 0.5px;
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
     }
 
-    .back-btn-animated:hover {
-      width: 140px;
-      border-radius: 50px;
-      background: linear-gradient(135deg, #426f7d 30%, #18b0b8 100%);
-    }
-
-    .back-btn-animated:hover .svgIcon {
-      transform: translateX(-10px);
-    }
-
-    .back-btn-animated:hover::before {
-      font-size: 1rem;
-      opacity: 1;
-    }
-
-    .floating-back-btn {
-      position: absolute;
-      top: 24px;
-      left: 24px;
-      z-index: 10;
-      margin: 0;
-    }
-
-    @media (max-width: 600px) {
-      .floating-back-btn {
-        top: 10px;
-        left: 10px;
-      }
-      .courses-grid {
-        grid-template-columns: repeat(2, 1fr);
-        padding: 10px;
-        gap: 12px;
-      }
-      .modal-content {
-        padding: 12px;
-        max-width: 98vw;
-      }
-      .back-btn-animated {
-        margin: 1rem 0 0 1rem;
-      }
+    @media (max-width: 768px) {
+      .hero { padding: 100px 20px 60px; }
+      .grid { grid-template-columns: 1fr; }
+      .controls { margin: -30px 20px 30px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Back Button -->
-  <button class="back-btn-animated floating-back-btn" onclick="window.location.href='index'">
-  <svg class="svgIcon" viewBox="0 0 384 512">
-    <path d="M41.4 278.6c-12.5-12.5-12.5-32.8 0-45.3l160-160c12.5-12.5 32.8-12.5 45.3 0s12.5 32.8 0 45.3L109.2 256l137.4 137.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0l-160-160z"></path>
-  </svg>
-</button>
+  <a href="index" class="back-btn">
+    <i class="fa-solid fa-arrow-left"></i>
+  </a>
 
-  <!-- Hero Section -->
-  <section class="hero-section">
-    <h1>Explore Our Courses</h1>
-    <p>Empowering your career through knowledge</p>
+  <section class="hero">
+    <h1>Premier Courses</h1>
+    <p>Discover industry-standard certifications designed to accelerate your career at MicroTech Academy.</p>
   </section>
 
-  <!-- Search + Filter -->
-  <div class="search-filter-container">
-    <input type="text" id="searchInput" placeholder="Search by course name" />
-    <select id="providerFilter">
-      <option value="">All Providers</option>
-      <option value="capt">CAPT</option>
-      <option value="lbs">LBS</option>
-      <option value="gama">Gama</option>
-      <option value="fashion">Fashion</option>
-      <option value="other">Other</option>
-    </select>
-  </div>
-
-  <!-- Courses Grid -->
-  <section class="courses-grid" id="coursesGrid">
-    Loading courses...
-  </section>
-
-  <!-- Modal -->
-  <div class="modal" id="courseModal">
-    <div class="modal-content">
-      <button class="close-btn">&times;</button>
-      <h3 id="modalTitle"></h3>
-      <img id="modalImage" src="" alt="">
-      <ul id="modalMeta"></ul>
+  <div class="controls">
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="searchInput" placeholder="Search by course name or technology...">
     </div>
   </div>
 
-  <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-analytics.js";
-  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+  <div class="grid" id="coursesGrid">
+    <!-- Skeletons render here first -->
+    <div class="course-card">
+      <div class="thumb-wrap skeleton"></div>
+      <div class="card-body">
+         <div style="height: 16px; width: 40%; margin-bottom: 12px;" class="skeleton"></div>
+         <div style="height: 24px; width: 90%; margin-bottom: 12px;" class="skeleton"></div>
+         <div style="height: 16px; width: 70%;" class="skeleton"></div>
+      </div>
+    </div>
+  </div>
 
-  // Your web app's Firebase configuration (matches admin dashboard)
-  const firebaseConfig = {
-    apiKey: "AIzaSyDUJut5RTre7-dMnZa1F7aMUgYMz3xN06Y",
-    authDomain: "microtech-88235.firebaseapp.com",
-    projectId: "microtech-88235",
-    storageBucket: "microtech-88235.appspot.com",
-    messagingSenderId: "156750699730",
-    appId: "1:156750699730:web:5ec11e8b5af90a21a26159"
-  };
+  <script>
+    const STORAGE_URL = 'https://pdabjjsyhyvarxortkau.supabase.co/storage/v1/object/public/course-images/';
+    const SUPABASE_URL = 'https://pdabjjsyhyvarxortkau.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkYWJqanN5aHl2YXJ4b3J0a2F1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyNjM4MTcsImV4cCI6MjA4MjgzOTgxN30.pdwwyjwl2KT1C2WF3fOuntj7SXhBZ7-2vVOcb7GAfFw';
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  const db = getFirestore(app);
+    const sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const grid = document.getElementById('coursesGrid');
+    const searchInput = document.getElementById('searchInput');
 
-  const grid = document.getElementById('coursesGrid');
-  const modal = document.getElementById('courseModal');
-  const closeBtn = document.querySelector('.close-btn');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalImage = document.getElementById('modalImage');
-  const modalMeta = document.getElementById('modalMeta');
-  const searchInput = document.getElementById('searchInput');
-  const providerFilter = document.getElementById('providerFilter');
+    let courses = [];
 
-  let allCourses = [];
+    async function init() {
+      try {
+        const { data, error } = await sbClient
+          .from('courses')
+          .select('*')
+          .eq('status', 'active')
+          .order('name');
 
-  async function loadCourses() {
-    try {
-      console.log('🔥 Loading courses from Firebase...');
-      grid.innerHTML = "<p style='text-align: center; padding: 40px; color: #0ea5e9;'><i class='fas fa-spinner fa-spin'></i> Loading courses...</p>";
-      
-      const snapshot = await getDocs(collection(db, 'courses'));
-      console.log('📊 Found', snapshot.size, 'courses');
-      
-      allCourses = snapshot.docs.map(doc => {
-        const data = doc.data();
-        console.log('📄 Course:', doc.id, data.name);
-        return { id: doc.id, ...data };
-      });
-      
-      console.log('✅ All courses loaded:', allCourses);
-      renderCourses(allCourses);
-      
-      if (allCourses.length === 0) {
-        console.warn('⚠️ No courses found in database');
+        if (error) throw error;
+        courses = data;
+        render(courses);
+      } catch (err) {
+        console.error('Error:', err);
+        grid.innerHTML = `<div style="text-align:center; padding: 40px; color: #ef4444; grid-column: 1/-1;">
+          <i class="fa-solid fa-triangle-exclamation" style="font-size: 2rem; margin-bottom:12px;"></i>
+          <p>Failed to load courses. Please try again later.</p>
+        </div>`;
       }
-    } catch (error) {
-      console.error("❌ Error loading courses:", error);
-      console.error("Error code:", error.code);
-      console.error("Error message:", error.message);
-      grid.innerHTML = `
-        <div style='text-align:center; padding: 40px; color: #ef4444;'>
-          <i class='fas fa-exclamation-triangle' style='font-size: 3rem; margin-bottom: 16px;'></i>
-          <p style='font-size: 1.2rem; margin-bottom: 8px;'>Failed to load courses</p>
-          <p style='font-size: 0.9rem; color: #64748b;'>${error.message}</p>
-          <button onclick='location.reload()' style='margin-top: 16px; padding: 10px 20px; background: #0ea5e9; color: white; border: none; border-radius: 6px; cursor: pointer;'>
-            <i class='fas fa-redo'></i> Retry
-          </button>
-        </div>
-      `;
     }
-  }
 
-  function renderCourses(courses) {
-    grid.innerHTML = '';
-    if (courses.length === 0) {
-      grid.innerHTML = "<p style='text-align: center; padding: 40px; color: #64748b;'>No matching courses found.</p>";
-      return;
-    }
-    courses.forEach(course => {
-      const card = document.createElement('div');
-      card.className = 'course-card';
-      card.onclick = () => showModal(course);
-      
-      // Get provider display
-      let providerText = 'Various';
-      if (Array.isArray(course.provider)) {
-        providerText = course.provider.map(p => p.toUpperCase()).join(', ');
-      } else if (Array.isArray(course.providers)) {
-        providerText = course.providers.map(p => p.toUpperCase()).join(', ');
-      } else if (course.provider) {
-        providerText = course.provider.toUpperCase();
+    function render(data) {
+      grid.innerHTML = '';
+      if (data.length === 0) {
+        grid.innerHTML = '<p style="text-align:center; grid-column: 1/-1; padding: 40px; color: #64748b;">No matching courses found.</p>';
+        return;
       }
-      
-      // Get image URL
-      const imageUrl = course.image || course.imageURL || 'https://via.placeholder.com/300x180?text=' + encodeURIComponent(course.name || 'Course');
-      
-      // Get description (truncate if too long)
-      const description = course.description || 'Click to view details';
-      const shortDesc = description.length > 80 ? description.substring(0, 80) + '...' : description;
-      
-      card.innerHTML = `
-        <img src="${imageUrl}" alt="${course.name || 'Course'}" onerror="this.src='https://via.placeholder.com/300x180?text=Course+Image'">
-        <div class="course-card-content">
-          <div class="course-title">${course.name || 'Untitled Course'}</div>
-          <div class="course-short" style="margin-bottom: 8px;">${shortDesc}</div>
-          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: #64748b; margin-top: 8px;">
-            <span><i class="fas fa-building" style="margin-right: 4px;"></i>${providerText}</span>
-            ${course.totalFee || course.fees ? `<span style="color: #0ea5e9; font-weight: bold;">₹${(course.totalFee || course.fees).toLocaleString()}</span>` : ''}
+
+      data.forEach(course => {
+        const card = document.createElement('div');
+        card.className = 'course-card';
+        
+        // Handle providers array
+        const providers = Array.isArray(course.providers) ? course.providers : [];
+        const providerTags = providers.map(p => `<span class="provider-tag">${p}</span>`).join('');
+        
+        // Image logic
+        const imgUrl = course.image_url ? course.image_url : `https://via.placeholder.com/600x400?text=${encodeURIComponent(course.name)}`;
+
+        card.innerHTML = `
+          <div class="thumb-wrap">
+            <img src="${imgUrl}" alt="${course.name}" onerror="this.src='https://via.placeholder.com/600x400?text=Course+Poster'">
+            <div class="badge-float">${course.duration || 'Flexible'}</div>
           </div>
-          ${course.duration ? `<div style="font-size: 0.85rem; color: #64748b; margin-top: 4px;"><i class="fas fa-clock" style="margin-right: 4px;"></i>${course.duration} months</div>` : ''}
-        </div>
-      `;
-      grid.appendChild(card);
-    });
-  }
-
-  function showModal(course) {
-    modalTitle.textContent = course.name || 'Course Details';
-    modalImage.src = course.image || course.imageURL || '';
-    
-    // Handle provider as array or string
-    let providerDisplay = '-';
-    if (Array.isArray(course.provider)) {
-      providerDisplay = course.provider.map(p => p.toUpperCase()).join(', ');
-    } else if (course.provider) {
-      providerDisplay = course.provider;
+          <div class="card-body">
+            <div class="card-providers">${providerTags}</div>
+            <h3 class="card-title">${course.name}</h3>
+            <div class="card-meta">
+              <div class="meta-item">
+                <i class="fa-solid fa-clock"></i>
+                <span>Standard Batch Timings: <strong>${course.batch_timings || 'Contact for info'}</strong></span>
+              </div>
+              <div class="meta-item">
+                <i class="fa-solid fa-award"></i>
+                <span>Certified by ${providers.join(' & ') || 'Academy'}</span>
+              </div>
+            </div>
+            <div style="margin-top: 24px;">
+              <a href="contact" style="display: block; width: 100%; padding: 12px; background: #0f172a; color: #fff; text-align: center; text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 0.85rem; transition: background 0.3s;">
+                Enquire Now
+              </a>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
     }
-    
-    // Handle providers field (alternative field name)
-    if (course.providers && Array.isArray(course.providers)) {
-      providerDisplay = course.providers.map(p => p.toUpperCase()).join(', ');
-    }
-    
-    modalMeta.innerHTML = `
-      <li><strong>Provider:</strong> ${providerDisplay}</li>
-      <li><strong>Division:</strong> ${course.division || '-'}</li>
-      <li><strong>Description:</strong> ${course.description || 'No description available'}</li>
-      <li><strong>Duration:</strong> ${course.duration ? course.duration + ' months' : '-'}</li>
-      <li><strong>Eligibility:</strong> ${course.eligibility || 'Check with provider'}</li>
-      <li><strong>Total Fee:</strong> ₹${course.totalFee?.toLocaleString() || course.fees?.toLocaleString() || '-'}</li>
-      <li><strong>Admission Fee:</strong> ₹${course.admissionFee?.toLocaleString() || '-'}</li>
-      <li><strong>Status:</strong> <span style="color: ${course.status === 'Active' ? 'green' : 'orange'}">${course.status || 'Active'}</span></li>
-      ${course.startDate ? `<li><strong>Start Date:</strong> ${new Date(course.startDate).toLocaleDateString()}</li>` : ''}
-      ${course.endDate ? `<li><strong>End Date:</strong> ${new Date(course.endDate).toLocaleDateString()}</li>` : ''}
-      ${course.studentsEnrolled ? `<li><strong>Students Enrolled:</strong> ${course.studentsEnrolled.length || 0}</li>` : ''}
-    `;
-    modal.classList.add('show');
-  }
 
-  function filterCourses() {
-    const keyword = searchInput.value.toLowerCase();
-    const selectedProvider = providerFilter.value;
-    const filtered = allCourses.filter(course => {
-      const nameMatch = course.name?.toLowerCase().includes(keyword);
-      // If provider is an array, check with includes
-      let providerMatch = true;
-      if (selectedProvider) {
-        if (Array.isArray(course.provider)) {
-          providerMatch = course.provider.includes(selectedProvider);
-        } else {
-          providerMatch = course.provider === selectedProvider;
-        }
-      }
-      return nameMatch && providerMatch;
+    searchInput.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase();
+      const filtered = courses.filter(c => 
+        c.name.toLowerCase().includes(q) || 
+        c.providers.some(p => p.toLowerCase().includes(q))
+      );
+      render(filtered);
     });
-    renderCourses(filtered);
-  }
 
-  searchInput.addEventListener('input', filterCourses);
-  providerFilter.addEventListener('change', filterCourses);
-  closeBtn.addEventListener('click', () => modal.classList.remove('show'));
-  window.addEventListener('click', e => {
-    if (e.target === modal) modal.classList.remove('show');
-  });
-
-  document.addEventListener('DOMContentLoaded', loadCourses);
-</script>
-
+    init();
+  </script>
 </body>
 </html>
