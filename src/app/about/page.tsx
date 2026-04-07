@@ -16,8 +16,8 @@ export default function About() {
 
       <section style={{ backgroundColor: 'var(--bg-color)' }}>
         <div className="container split-section">
-          <div className="split-images">
-            <img src="/micro-tech-center.jpg.png" alt="MicroTech Building" style={{ height: '400px', objectFit: 'cover' }} />
+          <div className="split-images" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--primary)', borderRadius: '2rem', height: '400px', padding: '4rem', boxShadow: 'inset 0 0 100px rgba(0,0,0,0.2)' }}>
+            <img src="/Microtech/mt_logo.png" alt="MicroTech Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           </div>
           <div>
             <span className="hero-tag">Our History</span>

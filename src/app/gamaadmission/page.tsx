@@ -35,15 +35,6 @@ export default function GamaAdmission() {
                 <input type="tel" placeholder="+91 0000000000" style={{ width: '100%', padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-light)', fontFamily: 'var(--font-body)' }} required />
               </div>
               <div style={{ gridColumn: '1 / -1' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Choose Level (if known)</label>
-                <select style={{ width: '100%', padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-light)', fontFamily: 'var(--font-body)', background: 'white' }}>
-                   <option value="beginner">Beginner (Level 1)</option>
-                   <option value="intermediate">Intermediate (Level 2-4)</option>
-                   <option value="advanced">Advanced (Level 5+)</option>
-                   <option value="unsure">Unsure - Request Placement Test</option>
-                </select>
-              </div>
-              <div style={{ gridColumn: '1 / -1' }}>
                 <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
                    Register for Inquiry <ChevronRight size={18} />
                 </button>
