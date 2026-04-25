@@ -16,24 +16,26 @@ export default function CaptAdmission() {
 
       <section style={{ backgroundColor: 'var(--bg-color)' }}>
         <div className="container">
-          <div style={{ maxWidth: '800px', margin: '0 auto', background: 'white', padding: '3.5rem', borderRadius: '1.5rem', border: '1px solid var(--border-light)', boxShadow: '0 10px 40px rgba(0,0,0,0.03)' }}>
-            <h2 style={{ marginBottom: '2rem', borderBottom: '2px solid var(--bg-alt)', paddingBottom: '1rem' }}>Admission Form</h2>
-            <form style={{ display: 'grid', gap: '2rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+          <div className="form-container">
+            <h2 style={{ marginBottom: '2rem', borderBottom: '1px solid var(--border-light)', paddingBottom: '1rem', color: 'var(--primary)' }}>Admission Form</h2>
+            <form style={{ display: 'grid', gap: '1.5rem', gridTemplateColumns: '1fr' }}>
               <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Full Name</label>
-                <input type="text" placeholder="Enter full name" style={{ width: '100%', padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-light)', fontFamily: 'var(--font-body)' }} required />
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, fontSize: '0.9rem', color: 'var(--text-muted)' }}>Full Name</label>
+                <input type="text" placeholder="Enter full name" style={{ width: '100%', padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-light)', fontFamily: 'var(--font-body)', outline: 'none' }} required />
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem', gridColumn: '1 / -1' }}>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, fontSize: '0.9rem', color: 'var(--text-muted)' }}>Contact Number</label>
+                  <input type="tel" placeholder="+91 0000000000" style={{ width: '100%', padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-light)', fontFamily: 'var(--font-body)', outline: 'none' }} required />
+                </div>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, fontSize: '0.9rem', color: 'var(--text-muted)' }}>Email ID</label>
+                  <input type="email" placeholder="example@email.com" style={{ width: '100%', padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-light)', fontFamily: 'var(--font-body)', outline: 'none' }} required />
+                </div>
               </div>
               <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Contact Number</label>
-                <input type="tel" placeholder="+91 0000000000" style={{ width: '100%', padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-light)', fontFamily: 'var(--font-body)' }} required />
-              </div>
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Email ID</label>
-                <input type="email" placeholder="example@email.com" style={{ width: '100%', padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-light)', fontFamily: 'var(--font-body)' }} required />
-              </div>
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Selected Program</label>
-                <select style={{ width: '100%', padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-light)', fontFamily: 'var(--font-body)', background: 'white' }} required>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, fontSize: '0.9rem', color: 'var(--text-muted)' }}>Selected Program</label>
+                <select style={{ width: '100%', padding: '1rem', borderRadius: '0.75rem', border: '1px solid var(--border-light)', fontFamily: 'var(--font-body)', background: 'white', outline: 'none' }} required>
                    <option value="">Choose a Program...</option>
                    <option value="basic">Basic Computing (DCA)</option>
                    <option value="dtp">Desktop Publishing (DTP)</option>

@@ -16,12 +16,12 @@ export default function About() {
 
       <section style={{ backgroundColor: 'var(--bg-color)' }}>
         <div className="container split-section">
-          <div className="split-images" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--primary)', borderRadius: '2rem', height: '400px', padding: '4rem', boxShadow: 'inset 0 0 100px rgba(0,0,0,0.2)' }}>
+          <div className="split-images" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--primary)', borderRadius: '2rem', minHeight: '300px', height: 'auto', padding: '4rem', boxShadow: 'inset 0 0 100px rgba(0,0,0,0.2)' }}>
             <img src="/Microtech/mt_logo.png" alt="MicroTech Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           </div>
           <div>
             <span className="hero-tag">Our History</span>
-            <h2 style={{ color: 'var(--primary)', marginBottom: '1.5rem', fontSize: '2.5rem' }}>A Legacy of Learning</h2>
+            <h2 style={{ color: 'var(--primary)', marginBottom: '1.5rem', fontSize: '2rem' }}>A Legacy of Learning</h2>
             <p>
               Founded in 1999 by Jenny K Paulose, Micro Tech Center was established with a singular vision: to bridge the digital divide by providing accessible, high-quality computer education to the community of Perambra, Kozhikode.
             </p>

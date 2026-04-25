@@ -21,7 +21,7 @@ export default function Home() {
             <div className="hero-tag">Educate. Innovate. Lead.</div>
             <h1>Turn Your Ambition into <i>Achievement</i></h1>
             <p>Empowering students with world-class education, innovation, and global opportunities.</p>
-            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <div className="hero-buttons" style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
               <Link href="/course" className="btn btn-primary">
                 Apply Now 
               </Link>
@@ -165,7 +165,7 @@ export default function Home() {
               <h2>Voices From Our Global Community</h2>
             </div>
             
-            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '2rem' }}>
+            <div className="testimonials-grid" style={{ display: 'grid', gap: '2rem' }}>
               <div style={{ background: 'var(--primary)', color: 'white', padding: '3.5rem 3rem', borderRadius: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                  <p style={{ color: 'rgba(255,255,255,0.9)', fontStyle: 'italic', marginBottom: '3rem', fontSize: '1.25rem', lineHeight: 1.8 }}>
                    "Studying here allowed me to connect with students from different cultures while gaining a strong academic foundation. The global exposure has truly shaped my view."

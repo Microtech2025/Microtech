@@ -15,7 +15,7 @@ export default function Programs() {
         color: 'white' 
       }}>
         <div className="container" style={{ display: 'block', textAlign: 'center' }}>
-          <h1 style={{ color: 'white', fontSize: '3.5rem', fontWeight: 800 }}>Academic Programs</h1>
+          <h1 style={{ color: 'white', fontSize: '2.5rem', fontWeight: 800 }}>Academic Programs</h1>
           <p style={{ margin: '1.5rem auto 0', color: 'rgba(255,255,255,0.7)', fontSize: '1.25rem', maxWidth: '800px' }}>
             Discover certified courses tailored for career success and personal growth.
           </p>
@@ -27,7 +27,7 @@ export default function Programs() {
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3rem' }}>
             {/* LBS Skill Centre */}
-            <div style={{ background: 'white', borderRadius: '2rem', padding: '4rem 2.5rem', textAlign: 'center', boxShadow: '0 15px 40px rgba(0,0,0,0.04)' }}>
+            <div style={{ background: 'white', borderRadius: '2rem', padding: '2.5rem 1.5rem', textAlign: 'center', boxShadow: '0 15px 40px rgba(0,0,0,0.04)' }}>
               <div style={{ color: '#1a3a34', marginBottom: '2.5rem' }}>
                 <GraduationCap size={64} strokeWidth={1} />
               </div>
@@ -109,7 +109,7 @@ export default function Programs() {
               <div style={{ color: '#1a3a34', marginBottom: '2.5rem' }}>
                 <Scissors size={64} strokeWidth={1} />
               </div>
-              <h3 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#1a3a34', marginBottom: '1.5rem' }}>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#1a3a34', marginBottom: '1.5rem' }}>
                 Fashion Designing
               </h3>
               <p style={{ color: '#555', lineHeight: '1.8', fontSize: '1.1rem', marginBottom: '2.5rem' }}>
@@ -137,7 +137,7 @@ export default function Programs() {
       <section style={{ backgroundColor: '#f4f7f6', paddingBottom: '10rem' }}>
         <div className="container">
           <div style={{ background: 'white', padding: '6rem 2rem', borderRadius: '3rem', textAlign: 'center', boxShadow: '0 20px 50px rgba(0,0,0,0.03)' }}>
-            <h2 style={{ fontSize: '3rem', fontWeight: 900, color: '#1a3a34', marginBottom: '1.5rem' }}>Need Guidance?</h2>
+            <h2 style={{ fontSize: '2.5rem', fontWeight: 900, color: '#1a3a34', marginBottom: '1.5rem' }}>Need Guidance?</h2>
             <p style={{ color: '#666', fontSize: '1.2rem', maxWidth: '700px', margin: '0 auto 3rem' }}>
               Our academic counselors are here to help you choose the right path for your specific career goals.
             </p>

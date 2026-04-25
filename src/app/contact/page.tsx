@@ -21,11 +21,11 @@ export default function Contact() {
           <div className="split-section" style={{ alignItems: 'flex-start' }}>
             
             <div style={{ background: 'white', padding: '3rem', borderRadius: '1.5rem', border: '1px solid var(--border-light)', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
-              <h2 style={{ fontSize: '2rem', marginBottom: '1.5rem' }}>Send Us a Message</h2>
+              <h2 style={{ fontSize: '1.75rem', marginBottom: '1.5rem' }}>Send Us a Message</h2>
               <form style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                  <input type="text" placeholder="First Name" style={{ flex: 1, padding: '1rem', borderRadius: '0.5rem', border: '1px solid var(--border-light)', fontFamily: 'var(--font-body)' }} required />
-                  <input type="text" placeholder="Last Name" style={{ flex: 1, padding: '1rem', borderRadius: '0.5rem', border: '1px solid var(--border-light)', fontFamily: 'var(--font-body)' }} required />
+                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                  <input type="text" placeholder="First Name" style={{ flex: '1 1 200px', padding: '1rem', borderRadius: '0.5rem', border: '1px solid var(--border-light)', fontFamily: 'var(--font-body)' }} required />
+                  <input type="text" placeholder="Last Name" style={{ flex: '1 1 200px', padding: '1rem', borderRadius: '0.5rem', border: '1px solid var(--border-light)', fontFamily: 'var(--font-body)' }} required />
                 </div>
                 <input type="email" placeholder="Email Address" style={{ padding: '1rem', borderRadius: '0.5rem', border: '1px solid var(--border-light)', fontFamily: 'var(--font-body)' }} required />
                 <input type="tel" placeholder="Phone Number" style={{ padding: '1rem', borderRadius: '0.5rem', border: '1px solid var(--border-light)', fontFamily: 'var(--font-body)' }} />
@@ -35,7 +35,7 @@ export default function Contact() {
             </div>
 
             <div>
-               <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem' }}>Contact Information</h2>
+               <h2 style={{ fontSize: '2rem', marginBottom: '1.5rem' }}>Contact Information</h2>
                <p style={{ marginBottom: '3rem' }}>Our administration office and technical service center are centrally located. Contact us during working hours for immediate assistance.</p>
                
                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>

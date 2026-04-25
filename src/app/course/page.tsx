@@ -50,7 +50,7 @@ export default function Courses() {
         color: 'white' 
       }}>
         <div className="container" style={{ display: 'block', textAlign: 'center' }}>
-          <h1 style={{ color: 'white', fontSize: '3.5rem', fontWeight: 400, marginBottom: '1rem', fontFamily: 'var(--font-heading)' }}>Academic Programs</h1>
+          <h1 style={{ color: 'white', fontSize: '2.5rem', fontWeight: 400, marginBottom: '1rem', fontFamily: 'var(--font-heading)' }}>Academic Programs</h1>
           <p style={{ margin: '0 auto', color: 'rgba(255,255,255,0.7)', fontSize: '1.2rem', maxWidth: '800px' }}>
             Discover certified courses tailored for career success and personal growth.
           </p>
@@ -170,7 +170,7 @@ export default function Courses() {
           <div className="container">
             <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
               <span className="hero-tag">Specialized Training</span>
-              <h2 style={{ fontSize: '2.5rem', color: '#1a3a34' }}>All Available Courses</h2>
+              <h2 style={{ fontSize: '2rem', color: '#1a3a34' }}>All Available Courses</h2>
               <p style={{ maxWidth: '700px', margin: '0 auto' }}>Extended list of professional certifications and vocational training available at our center.</p>
             </div>
 
@@ -242,7 +242,7 @@ export default function Courses() {
             border: 'none',
             textAlign: 'center'
           }}>
-            <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem', color: '#1a3a34', fontWeight: 800 }}>Need Guidance?</h2>
+            <h2 style={{ fontSize: '2rem', marginBottom: '1.5rem', color: '#1a3a34', fontWeight: 800 }}>Need Guidance?</h2>
             <p style={{ color: '#666', maxWidth: '600px', margin: '0 auto 3rem', fontSize: '1.1rem' }}>Our academic counselors are here to help you choose the right path for your specific career goals.</p>
             <Link href="/contact" className="btn btn-primary" style={{ backgroundColor: '#1a3a34', padding: '1.2rem 3rem', borderRadius: '1rem', fontWeight: 700 }}>
               Contact an Advisor <ChevronRight size={20} style={{ marginLeft: '0.5rem' }} />
